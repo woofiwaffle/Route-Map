@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+    <obstacle>
+        <pos>10.0, 20,0</pos>
+        <impasseIndex>80</impasseIndex>
+    </obstacle>
+    <obstacle>
+        <pos>30.0, 40,0</pos>
+        <impasseIndex>60</impasseIndex>
+    </obstacle>
+</map>
