@@ -22,7 +22,7 @@ core
 tags
 .DS_Store
 .directory
-*.debug
+*.debug/
 Makefile*
 *.prl
 *.app
