@@ -34,4 +34,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     LICENCE \
     README.md \
-    map.xml
+    map.xml \
+    docs/example.txt \
+    reports/README.md
