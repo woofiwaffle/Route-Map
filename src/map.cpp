@@ -1,4 +1,4 @@
-#include "map.h"
+#include "headers/map.h"
 
 
 TMap::TMap(QObject *parent) : QObject(parent) {}

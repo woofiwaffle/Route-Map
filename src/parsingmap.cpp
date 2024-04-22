@@ -1,4 +1,4 @@
-#include "parsingmap.h"
+#include "headers/parsingmap.h"
 
 TParsing::TParsing(QWidget* parent) : QWidget(parent){
     short response = 0;

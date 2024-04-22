@@ -1,4 +1,4 @@
-#include "obstacle.h"
+#include "headers/obstacle.h"
 
 
 TObstacle::TObstacle() : m_impasseIndex(0) {}

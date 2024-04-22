@@ -1,4 +1,4 @@
-#include "interface.h"
+#include "headers/interface.h"
 
 
 TInterface::TInterface(QWidget *parent) : QWidget(parent){

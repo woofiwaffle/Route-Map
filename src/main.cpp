@@ -1,5 +1,5 @@
-#include "interface.h"
-#include "parsingmap.h"
+#include "headers/interface.h"
+#include "headers/parsingmap.h"
 #include <QApplication>
 
 int main(int argc, char *argv[]){
