@@ -28,10 +28,9 @@ void MoveItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
      * курсора внутри графического элемента
      * в координатную систему графической сцены
      *
-     */
     this->setPos(mapToScene(event->pos()));
     emit pointAdded();
-    Q_UNUSED(event);
+    Q_UNUSED(event);*/
 }
 
 
@@ -40,9 +39,8 @@ void MoveItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     /* При нажатии мышью на графический элемент
      * заменяем курсор на руку, которая держит этот элемента
      *
-     */
     this->setCursor(QCursor(Qt::ClosedHandCursor));
-    Q_UNUSED(event);
+    Q_UNUSED(event);*/
 }
 
 
@@ -51,10 +49,10 @@ void MoveItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     /* При отпускании мышью элемента
      * заменяем на обычный курсор стрелку
      *
-     **/
+     *
     this->setCursor(QCursor(Qt::ArrowCursor));
 
-    Q_UNUSED(event);
+    Q_UNUSED(event);*/
 }
 
 

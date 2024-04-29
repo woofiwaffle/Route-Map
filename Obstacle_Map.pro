@@ -1,4 +1,6 @@
 QT       += core gui
+QT += xml
+QT += core5compat
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

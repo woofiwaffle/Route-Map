@@ -8,9 +8,9 @@ TInterface::TInterface(QWidget *parent) : QWidget(parent), ui(new Ui::TInterface
     setWindowTitle("Map Editor");
 
     connect(ui->button_Back, &QPushButton::clicked, this, &TInterface::backToMain);
-    connect(ui->button_NewPoint, &QPushButton::clicked, this, &TInterface::on_button_NewPoint_clicked);
-    //connect(ui->button_Index, &QPushButton::clicked, this, &TInterface::on_button_Index_clicked);
-    //connect(ui->button_Save, &QPushButton::clicked, this, &TInterface::on_button_Save_clicked);
+    connect(ui->button_CreateLine, &QPushButton::clicked, this, &TInterface::on_button_CreateLine_clicked);
+    connect(ui->button_ClearMap, &QPushButton::clicked, this, &TInterface::on_button_ClearMap_clicked);
+    connect(ui->button_Save, &QPushButton::clicked, this, &TInterface::on_button_Save_clicked);
 
 
 
@@ -43,7 +43,7 @@ void TInterface::mousePressEvent(QMouseEvent *event){
         item->setPos(event->pos());
         scene->addItem(item);   // Добавляем элемент на графическую сцену
     }
-    connect(item, &MoveItem::pointAdded, this, &TInterface::on_button_NewPoint_clicked);
+    connect(item, &MoveItem::pointAdded, this, &TInterface::on_button_CreateLine_clicked);
     //connect(item, &MoveItem::pointAdded, this, &TInterface::updateLine);
 
 }
@@ -78,7 +78,7 @@ bool TInterface::poisk(QGraphicsItem* item){
     return false;
 }
 
-void TInterface::on_button_NewPoint_clicked() {
+void TInterface::on_button_CreateLine_clicked() {
     QPen pen(Qt::white);
     if(scene->items().size() >= 2){
         MoveItem *item1 = nullptr;
@@ -124,8 +124,9 @@ void TInterface::on_button_NewPoint_clicked() {
 
 
 
-void TInterface::createLine() {
-
+void TInterface::on_button_ClearMap_clicked(){
+    scene->clear();
+    Points.clear();
 }
 
 
@@ -146,3 +147,9 @@ void TInterface::updateLine() {
         }
     }
 }
+
+
+void TInterface::on_button_Save_clicked(){
+
+}
+

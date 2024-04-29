@@ -4,20 +4,14 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <QGraphicsEllipseItem>
 #include <QGraphicsLineItem>
 #include <QMouseEvent>
 #include <QEvent>
-
-#include <QObject>
+#include <QDomDocument>
+#include <QFileDialog>
 #include <QGraphicsItem>
-#include <QPainter>
-#include <QGraphicsSceneMouseEvent>
 #include <QDebug>
-#include <QCursor>
 #include <vector>
-
-#include <random>
 #include <headers/moveitem.h>
 
 
@@ -41,7 +35,8 @@ public:
 private:
     Ui::TInterface *ui;
     QGraphicsScene *scene;
-    vector<QGraphicsItem*> Points;
+    vector<vector<QGraphicsItem*>> Polygons; // фигуры с адресами точек
+    vector<QGraphicsItem*> Points; // точки использованных фигур
 
     bool poisk(QGraphicsItem*);
     void createLine();
@@ -51,10 +46,9 @@ protected:
 
 private slots:
     void backToMain();
-    void on_button_NewPoint_clicked();
-    //void on_button_NewLine_clicked();
-    //void on_button_Index_clicked();
-    //void on_button_Save_clicked();
+    void on_button_CreateLine_clicked();
+    void on_button_ClearMap_clicked();
+    void on_button_Save_clicked();
 };
 
 #endif // INTERFACE_H
