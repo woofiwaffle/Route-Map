@@ -14,7 +14,6 @@ TParsing::TParsing(QWidget* parent) : QWidget(parent){
 
 
 
-
 string TParsing::getPath(){ // получение пути
     QFile* openFile = new QFile(QFileDialog::getOpenFileName(nullptr, tr("Open input file"), "Load Map", tr("XML (*.xml)")));
     return openFile->fileName().toStdString();

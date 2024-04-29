@@ -9,8 +9,19 @@
 #include <QMouseEvent>
 #include <QEvent>
 
+#include <QObject>
+#include <QGraphicsItem>
+#include <QPainter>
+#include <QGraphicsSceneMouseEvent>
+#include <QDebug>
+#include <QCursor>
+#include <vector>
 
-#include <src/moveitem.h>
+#include <random>
+#include <headers/moveitem.h>
+
+
+using namespace std;
 
 namespace Ui {
 class TInterface;
@@ -23,18 +34,27 @@ public:
     explicit TInterface(QWidget *parent = nullptr);
     ~TInterface();
 
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
 private:
     Ui::TInterface *ui;
-    QWidget *editScreen;
-    QWidget *mapScreen;
     QGraphicsScene *scene;
+    vector<QGraphicsItem*> Points;
+
+    bool poisk(QGraphicsItem*);
+    void createLine();
+    void updateLine();
 
 protected:
-    //virtual void MousePressEvent(QMouseEvent*);
 
 private slots:
     void backToMain();
-    void on_button_Back_4_clicked();
+    void on_button_NewPoint_clicked();
+    //void on_button_NewLine_clicked();
+    //void on_button_Index_clicked();
+    //void on_button_Save_clicked();
 };
 
 #endif // INTERFACE_H

@@ -9,14 +9,15 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/view.cpp \
     src/interface.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/map.cpp \
-    src/moveitem.cpp \
     src/obstacle.cpp \
     src/parsingmap.cpp \
     src/route.cpp \
+    src/moveitem.cpp
 
 HEADERS += \
     headers/interface.h \
@@ -25,7 +26,7 @@ HEADERS += \
     headers/obstacle.h \
     headers/parsingmap.h \
     headers/route.h \
-    src/moveitem.h
+    headers/moveitem.h
 
 FORMS += \
     ui/interface.ui \
