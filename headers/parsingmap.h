@@ -23,7 +23,7 @@ class TParsing : public QWidget {
 public:
     TParsing(QWidget* parent = nullptr);
 
-    TMap* map;
+    //TMap* map;
 
     string getPath();
     short parsingFile(const string&);

@@ -1,17 +1,18 @@
-#include "headers/interface.h"
+#include "headers/interfacemap.h"
 #include "headers/mainwindow.h"
 #include "headers/moveitem.h"
 #include "headers/obstacle.h"
-#include "ui_interface.h"
 
-TInterface::TInterface(QWidget *parent) : QWidget(parent), ui(new Ui::TInterface) {
+#include "ui_interfacemap.h"
+
+InterfaceMap::InterfaceMap(QWidget *parent) : QWidget(parent), ui(new Ui::InterfaceMap) {
     ui->setupUi(this);
     setWindowTitle("Map Editor");
 
-    connect(ui->button_Back, &QPushButton::clicked, this, &TInterface::backToMain);
-    connect(ui->button_CreateLine, &QPushButton::clicked, this, &TInterface::on_button_CreateLine_clicked);
-    connect(ui->button_ClearMap, &QPushButton::clicked, this, &TInterface::on_button_ClearMap_clicked);
-    connect(ui->button_Save, &QPushButton::clicked, this, &TInterface::on_button_Save_clicked);
+    connect(ui->button_Back, &QPushButton::clicked, this, &InterfaceMap::backToMain);
+    connect(ui->button_CreateLine, &QPushButton::clicked, this, &InterfaceMap::on_button_CreateLine_clicked);
+    connect(ui->button_ClearMap, &QPushButton::clicked, this, &InterfaceMap::on_button_ClearMap_clicked);
+    connect(ui->button_Save, &QPushButton::clicked, this, &InterfaceMap::on_button_Save_clicked);
 
 
 
@@ -32,43 +33,43 @@ TInterface::TInterface(QWidget *parent) : QWidget(parent), ui(new Ui::TInterface
 
 
 
-TInterface::~TInterface() {
+InterfaceMap::~InterfaceMap() {
     delete ui;
 }
 
 
 
-void TInterface::mousePressEvent(QMouseEvent *event){
+void InterfaceMap::mousePressEvent(QMouseEvent *event){
     MoveItem *item = new MoveItem();  // Создаём графический элемент
     if(event->button() == Qt::LeftButton){
         item->setPos(event->pos());
         scene->addItem(item);   // Добавляем элемент на графическую сцену
     }
-    connect(item, &MoveItem::pointAdded, this, &TInterface::on_button_CreateLine_clicked);
+    connect(item, &MoveItem::pointAdded, this, &InterfaceMap::on_button_CreateLine_clicked);
     //connect(item, &MoveItem::pointAdded, this, &TInterface::updateLine);
 }
 
 
 
-void TInterface::mouseMoveEvent(QMouseEvent *event){
+void InterfaceMap::mouseMoveEvent(QMouseEvent *event){
 
 }
 
 
 
-void TInterface::mouseReleaseEvent(QMouseEvent *event){
+void InterfaceMap::mouseReleaseEvent(QMouseEvent *event){
 
 }
 
 
 
-void TInterface::backToMain() {
+void InterfaceMap::backToMain() {
     MainWindow *mainWindow = new MainWindow();
     this->close();
     mainWindow->show();
 }
 
-bool TInterface::search(QGraphicsItem* item){
+bool InterfaceMap::search(QGraphicsItem* item){
     if(Points.empty()) return false;
     for(int i = Points.size()-1; i >= 0; i--){
         if(item == Points[i]) {
@@ -78,9 +79,10 @@ bool TInterface::search(QGraphicsItem* item){
     return false;
 }
 
-void TInterface::on_button_CreateLine_clicked() {
+void InterfaceMap::on_button_CreateLine_clicked() {
     QPen pen(Qt::white);
     if(scene->items().size() >= 2){
+        vector<QGraphicsItem*> Polygon;
         MoveItem *item1 = nullptr;
         MoveItem *item2 = nullptr;
         MoveItem *root = nullptr;
@@ -90,11 +92,13 @@ void TInterface::on_button_CreateLine_clicked() {
                     if(root == nullptr){
                         root = dynamic_cast<MoveItem *>(item);
                         Points.push_back(item);
+                        Polygon.push_back(item);
                     }
                     else{
                         if(item1 == nullptr){
                             item1 = moveItem;
                             Points.push_back(item);
+                            Polygon.push_back(item);
                             QGraphicsLineItem *line = new QGraphicsLineItem(QLineF(root->pos(), item1->pos()));
                             line->setPen(pen);
                             scene->addItem(line);
@@ -102,6 +106,7 @@ void TInterface::on_button_CreateLine_clicked() {
                         else{
                             item2 = moveItem;
                             Points.push_back(item);
+                            Polygon.push_back(item);
                             QGraphicsLineItem *line = new QGraphicsLineItem(QLineF(item1->pos(), item2->pos()));
                             line->setPen(pen);
                             scene->addItem(line);
@@ -113,6 +118,7 @@ void TInterface::on_button_CreateLine_clicked() {
                 }
             }
         }
+        Polygons.push_back(Polygon);
         if(item1 != nullptr && root != nullptr){
             QGraphicsLineItem *line = new QGraphicsLineItem(QLineF(root->pos(), item1->pos()));
             line->setPen(pen);
@@ -132,6 +138,7 @@ void TInterface::on_button_CreateLine_clicked() {
                 QGraphicsTextItem* indexItem = scene->addText(QString::number(passIndex));
                 indexItem->setPos(center);
                 indexItem->setDefaultTextColor(Qt::blue);
+                indexes.push_back(passIndex);
             }
         }
     }
@@ -139,33 +146,16 @@ void TInterface::on_button_CreateLine_clicked() {
 
 
 
-void TInterface::on_button_ClearMap_clicked() {
+void InterfaceMap::on_button_ClearMap_clicked() {
     scene->clear();
     Points.clear();
+    Polygons.clear();
+    indexes.clear();
 }
 
 
 
-void TInterface::updateLine() {
-    QList<QGraphicsItem *> items = scene->items();
-    for(QGraphicsItem *item : items){
-        QGraphicsLineItem *line = dynamic_cast<QGraphicsLineItem *>(item);
-        if(line){
-            QList<QGraphicsItem *> lineItems = line->collidingItems();
-            for(QGraphicsItem *lineItem : lineItems){
-                MoveItem *moveItem = dynamic_cast<MoveItem *>(lineItem);
-//                if(moveItem && (moveItem == item1 || moveItem == item2)){
-//                    line->setLine(QLineF(item1->pos(), item2->pos()));
-//                    break;
-//                }
-            }
-        }
-    }
-}
-
-
-
-void TInterface::on_button_CreateIndex_clicked() {
+void InterfaceMap::on_button_CreateIndex_clicked() {
 //    QGraphicsItem* selectedItem = scene->selectedItems().first();
 //    MoveItem* selectedMoveItem = dynamic_cast<MoveItem*>(selectedItem);
 //    if(!selectedMoveItem){
@@ -175,40 +165,49 @@ void TInterface::on_button_CreateIndex_clicked() {
 
 
 
-void TInterface::on_button_Save_clicked(){
-//    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Map"), "", tr("XML Files (*.xml)"));
-//    if(fileName.isEmpty()){
-//        return;
-//    }
+void InterfaceMap::on_button_Save_clicked(){
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Map"), "", tr("XML Files (*.xml)"));
+    if(fileName.isEmpty()){
+        return;
+    }
 
-//    QFile file(fileName);
-//    if(!file.open(QIODevice::WriteOnly)){
-//        qDebug() << "Failed to open file for writing";
-//        return;
-//    }
+    QFile file(fileName);
+    if(!file.open(QIODevice::WriteOnly)){
+        qDebug() << "Failed to open file for writing";                               // этот парсинг не записыывает линии
+        return;
+    }
 
-//    QXmlStreamWriter xmlWriter(&file);
-//    xmlWriter.setAutoFormatting(true);
-//    xmlWriter.writeStartDocument();
-//    xmlWriter.writeStartElement("map");
+    QXmlStreamWriter xmlWriter(&file);
+    xmlWriter.setAutoFormatting(true);
+    xmlWriter.writeStartDocument();
+    xmlWriter.writeStartElement("map");
 
-//    QList<QGraphicsItem*> items = scene->items();
-//    for(QGraphicsItem* item : items){
-//        Obstacle* obstacle = dynamic_cast<Obstacle*>(item);
-//        if(obstacle){
-//            QPointF pos = item->pos();
-//            int passIndex = obstacle->passIndex();
+    int flag = 0; // обозначает, когда писать индекс плотности (то есть в конец препятствия)
 
-//            xmlWriter.writeStartElement("obstacle");
-//            xmlWriter.writeAttribute("x", QString::number(pos.x()));
-//            xmlWriter.writeAttribute("y", QString::number(pos.y()));
-//            xmlWriter.writeAttribute("passIndex", QString::number(passIndex));
-//            xmlWriter.writeEndElement();
-//        }
-//    }
-//    xmlWriter.writeEndElement();
-//    xmlWriter.writeEndDocument();
-//    file.close();
+    QList<QGraphicsItem*> items = scene->items();
+    for(int i = 0; i < Polygons.size(); i+=2){
+        xmlWriter.writeStartElement("obstacle");
+        for(QGraphicsItem* item : Polygons[i]){
+            if(MoveItem* moveItem = dynamic_cast<MoveItem *>(item)){
+                QPointF pos = item->pos();
 
-//    qDebug() << "Map save to" << fileName;
+                xmlWriter.writeStartElement("point");
+                xmlWriter.writeAttribute("x", QString::number(pos.x()));
+                xmlWriter.writeAttribute("y", QString::number(pos.y()));
+                xmlWriter.writeEndElement();
+            }
+        }
+        xmlWriter.writeStartElement("index");
+        int passIndex = indexes[i/2];
+        xmlWriter.writeAttribute("id", QString::number(passIndex));
+        xmlWriter.writeEndElement();
+        flag = 0;
+        xmlWriter.writeEndElement();
+    }
+
+    xmlWriter.writeEndElement();
+    xmlWriter.writeEndDocument();
+    file.close();
+
+    qDebug() << "Map save to" << fileName;
 }
