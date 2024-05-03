@@ -103,9 +103,9 @@ color: #ffffff
       </spacer>
      </item>
      <item row="4" column="0">
-      <widget class="QPushButton" name="button_CreateLine">
+      <widget class="QPushButton" name="button_CreateObstacle">
        <property name="text">
-        <string>Create Lines</string>
+        <string>Create Obstacle</string>
        </property>
       </widget>
      </item>

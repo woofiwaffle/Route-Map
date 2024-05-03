@@ -4,13 +4,13 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <QGraphicsLineItem>
+//#include <QGraphicsLineItem>
 #include <QMouseEvent>
-#include <QEvent>
+//#include <QEvent>
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QGraphicsItem>
-#include <QDebug>
+//#include <QDebug>
 #include <QXmlStreamWriter>
 #include <vector>
 
@@ -35,9 +35,9 @@ public:
     explicit InterfaceMap(QWidget *parent = nullptr);
     ~InterfaceMap();
 
-    void mouseMoveEvent(QMouseEvent *event);
+    //void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
+    //void mouseReleaseEvent(QMouseEvent *event);
 
 private:
     Ui::InterfaceMap *ui;
@@ -51,14 +51,14 @@ private:
 
     bool search(QGraphicsItem*);
     void createLine();
+    void updateLine();
 
 protected:
 
 private slots:
     void backToMain();
-    void on_button_CreateLine_clicked();
+    void on_button_CreateObstacle_clicked();
     void on_button_ClearMap_clicked();
-    void on_button_CreateIndex_clicked();
     void on_button_Save_clicked();
 };
 

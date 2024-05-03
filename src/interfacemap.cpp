@@ -10,7 +10,7 @@ InterfaceMap::InterfaceMap(QWidget *parent) : QWidget(parent), ui(new Ui::Interf
     setWindowTitle("Map Editor");
 
     connect(ui->button_Back, &QPushButton::clicked, this, &InterfaceMap::backToMain);
-    connect(ui->button_CreateLine, &QPushButton::clicked, this, &InterfaceMap::on_button_CreateLine_clicked);
+    connect(ui->button_CreateObstacle, &QPushButton::clicked, this, &InterfaceMap::on_button_CreateObstacle_clicked);
     connect(ui->button_ClearMap, &QPushButton::clicked, this, &InterfaceMap::on_button_ClearMap_clicked);
     connect(ui->button_Save, &QPushButton::clicked, this, &InterfaceMap::on_button_Save_clicked);
 
@@ -45,21 +45,21 @@ void InterfaceMap::mousePressEvent(QMouseEvent *event){
         item->setPos(event->pos());
         scene->addItem(item);   // Добавляем элемент на графическую сцену
     }
-    connect(item, &MoveItem::pointAdded, this, &InterfaceMap::on_button_CreateLine_clicked);
+    connect(item, &MoveItem::pointAdded, this, &InterfaceMap::on_button_CreateObstacle_clicked);
     //connect(item, &MoveItem::pointAdded, this, &TInterface::updateLine);
 }
 
 
 
-void InterfaceMap::mouseMoveEvent(QMouseEvent *event){
+//void InterfaceMap::mouseMoveEvent(QMouseEvent *event){
 
-}
+//}
 
 
 
-void InterfaceMap::mouseReleaseEvent(QMouseEvent *event){
+//void InterfaceMap::mouseReleaseEvent(QMouseEvent *event){
 
-}
+//}
 
 
 
@@ -79,7 +79,7 @@ bool InterfaceMap::search(QGraphicsItem* item){
     return false;
 }
 
-void InterfaceMap::on_button_CreateLine_clicked() {
+void InterfaceMap::on_button_CreateObstacle_clicked() {   // добавить ограничение на создание препятствия из минимум трех точек
     QPen pen(Qt::white);
     if(scene->items().size() >= 2){
         vector<QGraphicsItem*> Polygon;
@@ -137,7 +137,7 @@ void InterfaceMap::on_button_CreateLine_clicked() {
                 QPointF center = (root->pos() + item1->pos()) / 2;
                 QGraphicsTextItem* indexItem = scene->addText(QString::number(passIndex));
                 indexItem->setPos(center);
-                indexItem->setDefaultTextColor(Qt::blue);
+                indexItem->setDefaultTextColor(Qt::red);
                 indexes.push_back(passIndex);
             }
         }
@@ -155,13 +155,13 @@ void InterfaceMap::on_button_ClearMap_clicked() {
 
 
 
-void InterfaceMap::on_button_CreateIndex_clicked() {
+//void InterfaceMap::on_button_CreateIndex_clicked() {
 //    QGraphicsItem* selectedItem = scene->selectedItems().first();
-//    MoveItem* selectedMoveItem = dynamic_cast<MoveItem*>(selectedItem);
+//   MoveItem* selectedMoveItem = dynamic_cast<MoveItem*>(selectedItem);
 //    if(!selectedMoveItem){
 //        return;
 //    }
-}
+//}
 
 
 
@@ -173,7 +173,7 @@ void InterfaceMap::on_button_Save_clicked(){
 
     QFile file(fileName);
     if(!file.open(QIODevice::WriteOnly)){
-        qDebug() << "Failed to open file for writing";                               // этот парсинг не записыывает линии
+        qDebug() << "Failed to open file for writing";
         return;
     }
 
@@ -182,9 +182,9 @@ void InterfaceMap::on_button_Save_clicked(){
     xmlWriter.writeStartDocument();
     xmlWriter.writeStartElement("map");
 
-    int flag = 0; // обозначает, когда писать индекс плотности (то есть в конец препятствия)
+    //int flag = 0; // обозначает, когда писать индекс плотности (то есть в конец препятствия)
 
-    QList<QGraphicsItem*> items = scene->items();
+    //QList<QGraphicsItem*> items = scene->items();
     for(int i = 0; i < Polygons.size(); i+=2){
         xmlWriter.writeStartElement("obstacle");
         for(QGraphicsItem* item : Polygons[i]){
@@ -201,7 +201,7 @@ void InterfaceMap::on_button_Save_clicked(){
         int passIndex = indexes[i/2];
         xmlWriter.writeAttribute("id", QString::number(passIndex));
         xmlWriter.writeEndElement();
-        flag = 0;
+        //flag = 0;
         xmlWriter.writeEndElement();
     }
 
