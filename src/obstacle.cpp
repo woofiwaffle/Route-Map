@@ -1,21 +1,22 @@
 #include "headers/obstacle.h"
 
 
-TObstacle::TObstacle() : m_impasseIndex(0) {}
 
-TObstacle::TObstacle(const QPointF& pos, int impasseIndex) : m_pos(pos), m_impasseIndex(impasseIndex) {}
-
-//Obstacle::~Obstacle() {}
+Obstacle::Obstacle(QGraphicsScene* scene, const QPolygonF& polygon, int impasseIndex)
+    : scene(scene), polygon(polygon), impasseIndex(impasseIndex) {}
 
 
 
-
-QPointF TObstacle::getPos() const{
-    return m_pos; // получение позиции препятствия
-}
+Obstacle::~Obstacle() {}
 
 
 
-int TObstacle::getImpasseIndex() const{
-    return m_impasseIndex; // получить индекс тупика
+void Obstacle::create() {
+    QGraphicsPolygonItem* obstacleItem = scene->addPolygon(polygon);
+    obstacleItem->setBrush(Qt::white);
+
+    QString indexText = QString::number(impasseIndex) + "%";
+    QGraphicsSimpleTextItem* indexTextItem = scene->addSimpleText(indexText);
+    indexTextItem->setFont(QFont("Arial", 10));
+    indexTextItem->setPos(polygon.boundingRect().center() - QPointF(10, 10));
 }

@@ -1,5 +1,5 @@
-#ifndef INTERFACE_H
-#define INTERFACE_H
+#ifndef INTERFACEMAP_H
+#define INTERFACEMAP_H
 
 #include <QWidget>
 #include <QGraphicsScene>
@@ -24,35 +24,33 @@ enum CustomRoles {
 };
 
 
-namespace Ui {
-class TInterface;
-}
+namespace Ui { class InterfaceMap; }
 
 
 
-
-
-class TInterface : public QWidget {
+class InterfaceMap : public QWidget {
     Q_OBJECT
 
 public:
-    explicit TInterface(QWidget *parent = nullptr);
-    ~TInterface();
+    explicit InterfaceMap(QWidget *parent = nullptr);
+    ~InterfaceMap();
 
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
 
 private:
-    Ui::TInterface *ui;
+    Ui::InterfaceMap *ui;
     QGraphicsScene *scene;
 
-    vector<vector<QGraphicsItem*>> Polygons; // фигуры с адресами точек
-    vector<QGraphicsItem*> Points; // точки использованных фигур
+
+    vector<vector<QGraphicsItem*>> Polygons;
+    vector<int> indexes;
+
+    vector<QGraphicsItem*> Points;
 
     bool search(QGraphicsItem*);
     void createLine();
-    void updateLine();
 
 protected:
 
@@ -64,4 +62,4 @@ private slots:
     void on_button_Save_clicked();
 };
 
-#endif // INTERFACE_H
+#endif // INTERFACEMAP_H

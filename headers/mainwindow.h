@@ -3,11 +3,7 @@
 
 #include <QWidget>
 
-
-QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
-
 
 
 class MainWindow : public QWidget {
@@ -22,7 +18,7 @@ private:
 
 private slots:
     void openMapWindow();
-    void openEditWindow();
+    void openRouteWindow();
 };
 
 #endif // MAINWINDOW_H

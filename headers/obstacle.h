@@ -1,24 +1,27 @@
-#ifndef TOBSTACLE_H
-#define TOBSTACLE_H
+#ifndef OBSTACLE_H
+#define OBSTACLE_H
 
+#include <QGraphicsScene>
+#include <QGraphicsPolygonItem>
+#include <QGraphicsSimpleTextItem>
+#include <QFont>
 #include <QPolygonF>
 
 /**
  * @brief The Obstacle class
  */
-class TObstacle{
+class Obstacle{
 public:
-    TObstacle();
-    //~Obstacle();
-    TObstacle(const QPointF& pos, int impasseIndex);
+    Obstacle(QGraphicsScene* scene, const QPolygonF& polygon, int impasseIndex);
+    ~Obstacle();
 
-    QPointF getPos() const;
-    int getImpasseIndex() const;
+    void create();
 
 
 private:
-    QPointF m_pos;
-    int m_impasseIndex;
+    QGraphicsScene* scene;
+    QPolygonF polygon;
+    int impasseIndex;
 };
 
-#endif // TOBSTACLE_H
+#endif // OBSTACLE_H

@@ -16,8 +16,14 @@ void MoveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->setPen(Qt::green);
     painter->setBrush(Qt::green);
     painter->drawPoint(0,0);
+
     Q_UNUSED(option);
     Q_UNUSED(widget);
+}
+
+
+int MoveItem::passIndex() const {
+    return passIndex_;
 }
 
 
@@ -54,6 +60,7 @@ void MoveItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 
     Q_UNUSED(event);*/
 }
+
 
 
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>382</width>
-    <height>247</height>
+    <width>672</width>
+    <height>420</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,6 +20,16 @@ color: #ffffff</string>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
+     <item row="7" column="0">
+      <widget class="QPushButton" name="button_Map">
+       <property name="styleSheet">
+        <string notr="true">font-size: 9pt;</string>
+       </property>
+       <property name="text">
+        <string>Map Editor</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="0" colspan="2">
       <widget class="QLabel" name="label">
        <property name="mouseTracking">
@@ -33,18 +43,8 @@ color: #ffffff</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QPushButton" name="button_Edit">
-       <property name="styleSheet">
-        <string notr="true">font-size: 9pt;</string>
-       </property>
-       <property name="text">
-        <string>Map Editor</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QPushButton" name="button_Map">
+     <item row="7" column="1">
+      <widget class="QPushButton" name="button_Route">
        <property name="styleSheet">
         <string notr="true">font-size: 9pt;</string>
        </property>

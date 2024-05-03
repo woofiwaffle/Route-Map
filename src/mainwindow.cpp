@@ -1,15 +1,14 @@
 #include "headers/mainwindow.h"
+#include "headers/interfaceroute.h"
+#include "headers/interfacemap.h"
+
 #include "ui_mainwindow.h"
-
-#include "headers/interface.h"
-
-
 
 MainWindow::MainWindow(QWidget *parent): QWidget(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
+    connect(ui->button_Route, &QPushButton::clicked, this, &MainWindow::openRouteWindow);
     connect(ui->button_Map, &QPushButton::clicked, this, &MainWindow::openMapWindow);
-    connect(ui->button_Edit, &QPushButton::clicked, this, &MainWindow::openEditWindow);
 }
 
 
@@ -19,17 +18,16 @@ MainWindow::~MainWindow() {
 }
 
 
-void MainWindow::openMapWindow() {
-    //TInterface *mapWindow = new TInterface();
-    //this->hide();
-
-    //mapWindow->show();
+void MainWindow::openRouteWindow() {
+    InterfaceRoute *routeWindow = new InterfaceRoute();
+    this->hide();
+    routeWindow->show();
 }
 
 
 
-void MainWindow::openEditWindow() {
-    TInterface *editWindow = new TInterface();
+void MainWindow::openMapWindow() {
+    InterfaceMap *mapWindow = new InterfaceMap();
     this->hide();
-    editWindow->show();
+    mapWindow->show();
 }

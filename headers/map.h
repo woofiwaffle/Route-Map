@@ -1,28 +1,28 @@
-#ifndef TMAP_H
-#define TMAP_H
+//#ifndef TMAP_H
+//#define TMAP_H
 
-#include "obstacle.h"
-#include "route.h"
+//#include "obstacle.h"
+//#include "route.h"
 
-#include <QObject>
-#include <QVector>
+//#include <QObject>
+//#include <QVector>
 
-/**
- * @brief The Map class
- */
-class TMap : public QObject{
-    Q_OBJECT
+///**
+// * @brief The Map class
+// */
+//class TMap : public QObject{
+//    Q_OBJECT
 
-public:
+//public:
 
-    TMap(QObject *parent = nullptr);
-    ~TMap();
+//    TMap(QObject *parent = nullptr);
+//    ~TMap();
 
-    TRoute findOptimalRoute() const;
-    void addObstacle(const TObstacle& obstacle);
+//    TRoute findOptimalRoute() const;
+//    void addObstacle(const TObstacle& obstacle);
 
-private:
-    QVector<TObstacle> obstacles;
-};
+//private:
+//    QVector<TObstacle> obstacles;
+//};
 
-#endif // TMAP_H
+//#endif // TMAP_H

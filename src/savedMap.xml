@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+    <obstacle>
+        <point x="191" y="180"/>
+        <point x="229" y="137"/>
+        <point x="311" y="239"/>
+        <index id="23"/>
+    </obstacle>
+    <obstacle>
+        <point x="322" y="394"/>
+        <point x="389" y="283"/>
+        <point x="444" y="427"/>
+        <point x="335" y="463"/>
+        <index id="34"/>
+    </obstacle>
+</map>

@@ -4,7 +4,7 @@ TParsing::TParsing(QWidget* parent) : QWidget(parent){
     short response = 0;
     while(response != 1 && response != -1){
         string path = getPath();
-        map = new TMap();
+        //map = new TMap();
         response = parsingFile(path);
         if(response != 1){
             error(response);

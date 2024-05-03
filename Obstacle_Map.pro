@@ -1,6 +1,4 @@
 QT       += core gui
-QT += xml
-QT += core5compat
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,8 +9,8 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    src/view.cpp \
-    src/interface.cpp \
+    src/interfacemap.cpp \
+    src/interfaceroute.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/map.cpp \
@@ -22,7 +20,8 @@ SOURCES += \
     src/moveitem.cpp
 
 HEADERS += \
-    headers/interface.h \
+    headers/interfacemap.h \
+    headers/interfaceroute.h \
     headers/mainwindow.h \
     headers/map.h \
     headers/obstacle.h \
@@ -31,7 +30,8 @@ HEADERS += \
     headers/moveitem.h
 
 FORMS += \
-    ui/interface.ui \
+    ui/interfaceroute.ui \
+    ui/interfacemap.ui \
     ui/mainwindow.ui
 
 RESOURCES += \
@@ -40,7 +40,8 @@ RESOURCES += \
 DISTFILES += \
     LICENCE \
     README.md \
-    src/map.xml \
+    src/inputMap.xml \
+    src/savedMap.xml \
     docs/example.txt \
     reports/README.md
 
