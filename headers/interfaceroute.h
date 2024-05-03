@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <QList>
 
 #include "headers/moveitem.h"
 #include "headers/interfacemap.h"
@@ -34,8 +33,8 @@ private:
 private slots:
     void backToMain();
     void on_button_LoadingMap_clicked();
-    //void on_button_StartJourney_clicked();
-    //void on_button_FinishJourney_clicked();
+    void on_button_StartJourney_clicked();
+    void on_button_FinishJourney_clicked();
     //void on_button_Save_clicked();
 };
 

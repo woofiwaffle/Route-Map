@@ -7,8 +7,8 @@ InterfaceRoute::InterfaceRoute(QWidget *parent) : QWidget(parent), ui(new Ui::In
     setWindowTitle("Route");
 
     connect(ui->button_Back, &QPushButton::clicked, this, &InterfaceRoute::backToMain);
-    //connect(ui->button_StartJourney, &QPushButton::clicked, this, &InterfaceRoute::on_button_StartJourney_clicked);
-    //connect(ui->button_FinishJourney, &QPushButton::clicked, this, &InterfaceRoute::on_button_FinishJourney_clicked);
+    connect(ui->button_StartJourney, &QPushButton::clicked, this, &InterfaceRoute::on_button_StartJourney_clicked);
+    connect(ui->button_FinishJourney, &QPushButton::clicked, this, &InterfaceRoute::on_button_FinishJourney_clicked);
     connect(ui->button_LoadingMap, &QPushButton::clicked, this, &InterfaceRoute::on_button_LoadingMap_clicked);
     //connect(ui->button_Save, &QPushButton::clicked, this, &InterfaceRoute::on_button_Save_clicked);
 
@@ -43,7 +43,7 @@ void InterfaceRoute::backToMain() {
 
 
 
-void InterfaceRoute::loadMapFromXml(const QString& fileName) { // парсинг работает, но не показывает линии
+void InterfaceRoute::loadMapFromXml(const QString& fileName) {
     vector<QGraphicsItem*> Polygon;
     QFile file(fileName);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -132,9 +132,9 @@ void InterfaceRoute::loadMapFromXml(const QString& fileName) { // парсинг
             line->setPen(pen);
             scene->addItem(line);
 
-            bool ok;
-            int passIndex = indexes[i];
-            if(ok){
+//            bool ok;
+//            int passIndex = indexes[i];
+//            if(ok){
                 //for(QGraphicsItem* item : scene->items()){
                 //    QGraphicsLineItem* lineItem = dynamic_cast<QGraphicsLineItem*>(item);
                 //    if(lineItem){
@@ -143,11 +143,11 @@ void InterfaceRoute::loadMapFromXml(const QString& fileName) { // парсинг
                 //    }
                 //}
                 QPointF center = (root->pos() + item1->pos()) / 2;
-                QGraphicsTextItem* indexItem = scene->addText(QString::number(passIndex));
+                QGraphicsTextItem* indexItem = scene->addText(QString::number(indexes[i]));
                 indexItem->setPos(center);
-                indexItem->setDefaultTextColor(Qt::blue);
-                indexes.push_back(passIndex);
-            }
+                indexItem->setDefaultTextColor(Qt::red);
+                //indexes.push_back(passIndex);
+            //}
         }
     }
 
@@ -166,4 +166,16 @@ void InterfaceRoute::on_button_LoadingMap_clicked() {
     if(!Polygons.empty()) Polygons.clear();
     scene->clear();
     loadMapFromXml(fileName);
+}
+
+
+
+void InterfaceRoute::on_button_StartJourney_clicked() {
+
+}
+
+
+
+void InterfaceRoute::on_button_FinishJourney_clicked() {
+
 }
