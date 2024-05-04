@@ -1,9 +1,8 @@
 #include "headers/interfacemap.h"
 #include "headers/mainwindow.h"
-#include "headers/moveitem.h"
-#include "headers/obstacle.h"
-
 #include "ui_interfacemap.h"
+
+
 
 InterfaceMap::InterfaceMap(QWidget *parent) : QWidget(parent), ui(new Ui::InterfaceMap) {
     ui->setupUi(this);
@@ -82,7 +81,7 @@ bool InterfaceMap::search(QGraphicsItem* item){
 void InterfaceMap::on_button_CreateObstacle_clicked() {   // добавить ограничение на создание препятствия из минимум трех точек
     QPen pen(Qt::white);
     if(scene->items().size() >= 2){
-        vector<QGraphicsItem*> Polygon;
+        std::vector<QGraphicsItem*> Polygon;
         MoveItem *item1 = nullptr;
         MoveItem *item2 = nullptr;
         MoveItem *root = nullptr;

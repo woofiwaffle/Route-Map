@@ -4,20 +4,16 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-//#include <QGraphicsLineItem>
 #include <QMouseEvent>
-//#include <QEvent>
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QGraphicsItem>
-//#include <QDebug>
 #include <QXmlStreamWriter>
+#include <QDebug>
 #include <vector>
 
 #include <headers/moveitem.h>
 
-
-using namespace std;
 
 enum CustomRoles {
     passIndexRole = Qt::UserRole + 1
@@ -44,10 +40,10 @@ private:
     QGraphicsScene *scene;
 
 
-    vector<vector<QGraphicsItem*>> Polygons;
-    vector<int> indexes;
+    std::vector<std::vector<QGraphicsItem*>> Polygons;
+    std::vector<int> indexes;
 
-    vector<QGraphicsItem*> Points;
+    std::vector<QGraphicsItem*> Points;
 
     bool search(QGraphicsItem*);
     void createLine();

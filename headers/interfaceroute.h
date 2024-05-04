@@ -4,11 +4,18 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QFileDialog>
+#include <QInputDialog>
+#include <QGraphicsItem>
+#include <QXmlStreamReader>
+#include <QDebug>
 
 #include "headers/moveitem.h"
-#include "headers/interfacemap.h"
+
 
 namespace Ui { class InterfaceRoute; }
+
+
 
 class InterfaceRoute : public QWidget {
     Q_OBJECT
@@ -25,8 +32,8 @@ private:
     QGraphicsItem* FinishPoint;
 
 
-    vector<vector<QGraphicsItem*>> Polygons;
-    vector<int> indexes;
+    std::vector<std::vector<QGraphicsItem*>> Polygons;
+    std::vector<int> indexes;
 
     void loadMapFromXml(const QString& fileName);
 
