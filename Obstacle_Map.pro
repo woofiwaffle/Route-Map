@@ -13,9 +13,7 @@ SOURCES += \
     src/interfaceroute.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
-    src/map.cpp \
     src/obstacle.cpp \
-    src/parsingmap.cpp \
     src/route.cpp \
     src/moveitem.cpp
 
@@ -23,9 +21,7 @@ HEADERS += \
     headers/interfacemap.h \
     headers/interfaceroute.h \
     headers/mainwindow.h \
-    headers/map.h \
     headers/obstacle.h \
-    headers/parsingmap.h \
     headers/route.h \
     headers/moveitem.h
 

@@ -44,7 +44,7 @@ void InterfaceRoute::backToMain() {
 
 
 void InterfaceRoute::loadMapFromXml(const QString& fileName) {
-    vector<QGraphicsItem*> Polygon;
+    std::vector<QGraphicsItem*> Polygon;
     QFile file(fileName);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         return;

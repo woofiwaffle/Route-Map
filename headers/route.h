@@ -1,25 +1,48 @@
-#ifndef TROUTE_H
-#define TROUTE_H
+#ifndef ROUTE_H
+#define ROUTE_H
 
 
-#include <QPolygonF>
+#include <QGraphicsItem>
+#include <QObject>
+#include <QGraphicsScene>
+#include <QXmlStreamReader>
+#include <QFile>
+#include <vector>
+
+#include <headers/moveitem.h>
+
+using namespace std;
 
 /**
  * @brief The Route class
  */
-class TRoute{
+class Route : public QObject {
+    Q_OBJECT
+
 public:
-    TRoute(const QPolygonF& points, qreal length, qreal time);              // методы для вычисления маршрута
+    explicit Route(QObject *parent = nullptr);              // методы для вычисления маршрута
 
-    QPolygonF getPoints() const;
-    qreal getLength() const;
-    qreal getTime() const;
+protected:
+    //void loadMapFromXml(const QString& fileName);
+    //void setStartPoint(QGraphicsItem startPoint);
+    //void setFinishPoint(QGraphicsItem finishPoint);
+    //void findOptimalRoute();
+    //void saveRouteToFile(const QString& fileName);
 
+    //vector<vector<QGraphicsItem*>> Polygons;
+    //vector<int> indexes;
 
 private:
-    QPolygonF m_points;
-    qreal m_length;
-    qreal m_time;
+    QGraphicsScene* scene;
+//    vector<QGraphicsItem*> m_obstacles;
+//    QGraphicsItem* m_startPoint;
+//    QGraphicsItem* m_finishPoint;
+//    vector<QGraphicsItem*> m_optimalRoute;
+
+//    vector<vector<QGraphicsItem*>> Polygons;
+  //  vector<int> indexes;
+
+//    void clearRoute();
 };
 
 #endif // TROUTE_H
