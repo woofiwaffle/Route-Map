@@ -1,6 +1,9 @@
 #include "headers/interfaceroute.h"
 #include "headers/mainwindow.h"
 #include "ui_interfaceroute.h"
+#include "ui_interfacemap.h"
+
+
 
 InterfaceRoute::InterfaceRoute(QWidget *parent) : QWidget(parent), ui(new Ui::InterfaceRoute) {
     ui->setupUi(this);
@@ -8,7 +11,6 @@ InterfaceRoute::InterfaceRoute(QWidget *parent) : QWidget(parent), ui(new Ui::In
 
     connect(ui->button_Back, &QPushButton::clicked, this, &InterfaceRoute::backToMain);
     connect(ui->button_StartJourney, &QPushButton::clicked, this, &InterfaceRoute::on_button_StartJourney_clicked);
-    connect(ui->button_FinishJourney, &QPushButton::clicked, this, &InterfaceRoute::on_button_FinishJourney_clicked);
     connect(ui->button_LoadingMap, &QPushButton::clicked, this, &InterfaceRoute::on_button_LoadingMap_clicked);
     //connect(ui->button_Save, &QPushButton::clicked, this, &InterfaceRoute::on_button_Save_clicked);
 
@@ -158,6 +160,8 @@ void InterfaceRoute::loadMapFromXml(const QString& fileName) {
     file.close();
 }
 
+
+
 void InterfaceRoute::on_button_LoadingMap_clicked() {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open Map"), "", tr("XML Files (*.xml)"));
     if (fileName.isEmpty()) {
@@ -170,12 +174,17 @@ void InterfaceRoute::on_button_LoadingMap_clicked() {
 
 
 
+void InterfaceRoute::findOptimalRoute(QGraphicsItem* start, QGraphicsItem* finish) {
+
+}
+
+
+
 void InterfaceRoute::on_button_StartJourney_clicked() {
 
 }
 
 
 
-void InterfaceRoute::on_button_FinishJourney_clicked() {
-
+void InterfaceMap::mousePressEvent(QMouseEvent *event){
 }

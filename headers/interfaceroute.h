@@ -24,6 +24,8 @@ public:
     InterfaceRoute(QWidget *parent = nullptr);
     ~InterfaceRoute();
 
+   void mousePressEvent(QMouseEvent *event);
+
 private:
     Ui::InterfaceRoute *ui;
     QGraphicsScene *scene;
@@ -36,12 +38,12 @@ private:
     std::vector<int> indexes;
 
     void loadMapFromXml(const QString& fileName);
+    void findOptimalRoute(QGraphicsItem* start, QGraphicsItem* finish);
 
 private slots:
     void backToMain();
     void on_button_LoadingMap_clicked();
     void on_button_StartJourney_clicked();
-    void on_button_FinishJourney_clicked();
     //void on_button_Save_clicked();
 };
 

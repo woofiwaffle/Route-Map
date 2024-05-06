@@ -31,9 +31,7 @@ public:
     explicit InterfaceMap(QWidget *parent = nullptr);
     ~InterfaceMap();
 
-    //void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
-    //void mouseReleaseEvent(QMouseEvent *event);
 
 private:
     Ui::InterfaceMap *ui;
