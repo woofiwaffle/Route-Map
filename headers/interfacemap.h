@@ -12,7 +12,8 @@
 #include <QDebug>
 #include <vector>
 
-#include <headers/moveitem.h>
+
+using namespace std;
 
 
 enum CustomRoles {
@@ -38,20 +39,14 @@ private:
     QGraphicsScene *scene;
 
 
-    std::vector<std::vector<QGraphicsItem*>> Polygons;
     std::vector<int> indexes;
-
-    std::vector<QGraphicsItem*> Points;
-
-    bool search(QGraphicsItem*);
-    void createLine();
-    void updateLine();
+    vector <QPolygonF> Polygons;
+    QPolygonF Polygon;
 
 protected:
 
 private slots:
     void backToMain();
-    void on_button_CreateObstacle_clicked();
     void on_button_ClearMap_clicked();
     void on_button_Save_clicked();
 };

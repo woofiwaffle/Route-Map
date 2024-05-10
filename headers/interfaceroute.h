@@ -10,7 +10,8 @@
 #include <QXmlStreamReader>
 #include <QDebug>
 
-#include "headers/moveitem.h"
+
+using namespace std;
 
 
 namespace Ui { class InterfaceRoute; }
@@ -24,8 +25,6 @@ public:
     InterfaceRoute(QWidget *parent = nullptr);
     ~InterfaceRoute();
 
-   void mousePressEvent(QMouseEvent *event);
-
 private:
     Ui::InterfaceRoute *ui;
     QGraphicsScene *scene;
@@ -33,14 +32,15 @@ private:
     QGraphicsItem* StartPoint;
     QGraphicsItem* FinishPoint;
 
-
-    std::vector<std::vector<QGraphicsItem*>> Polygons;
     std::vector<int> indexes;
+    vector <QPolygonF> Polygons;
+    QPolygonF Polygon;
 
     void loadMapFromXml(const QString& fileName);
     void findOptimalRoute(QGraphicsItem* start, QGraphicsItem* finish);
 
 private slots:
+    double heuristic(QPointF*, QPointF*);
     void backToMain();
     void on_button_LoadingMap_clicked();
     void on_button_StartJourney_clicked();

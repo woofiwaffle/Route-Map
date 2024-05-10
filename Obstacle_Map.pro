@@ -14,16 +14,14 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/obstacle.cpp \
-    src/route.cpp \
-    src/moveitem.cpp
+    src/route.cpp
 
 HEADERS += \
     headers/interfacemap.h \
     headers/interfaceroute.h \
     headers/mainwindow.h \
     headers/obstacle.h \
-    headers/route.h \
-    headers/moveitem.h
+    headers/route.h
 
 FORMS += \
     ui/interfaceroute.ui \
