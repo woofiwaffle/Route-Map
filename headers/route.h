@@ -1,7 +1,6 @@
 #ifndef ROUTE_H
 #define ROUTE_H
 
-
 #include <QGraphicsItem>
 #include <QObject>
 #include <QGraphicsScene>
@@ -11,9 +10,7 @@
 
 using namespace std;
 
-/**
- * @brief The Route class
- */
+
 class Route : public QObject {
     Q_OBJECT
 
@@ -42,5 +39,6 @@ private:
 
 //    void clearRoute();
 };
+
 
 #endif // TROUTE_H

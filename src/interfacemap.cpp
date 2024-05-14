@@ -59,7 +59,8 @@ void InterfaceMap::mousePressEvent(QMouseEvent *event){
                 delete Item;
             }
         }
-        scene->addPolygon(Polygon,pen, Qt::green);
+        scene->addPolygon(Polygon, pen, Qt::green);
+
         Polygons.push_back(Polygon);
 
         bool ok;
