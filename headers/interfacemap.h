@@ -4,20 +4,17 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <QGraphicsLineItem>
 #include <QMouseEvent>
-#include <QEvent>
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QGraphicsItem>
-#include <QDebug>
 #include <QXmlStreamWriter>
+#include <QDebug>
 #include <vector>
-
-#include <headers/moveitem.h>
 
 
 using namespace std;
+
 
 enum CustomRoles {
     passIndexRole = Qt::UserRole + 1
@@ -35,30 +32,22 @@ public:
     explicit InterfaceMap(QWidget *parent = nullptr);
     ~InterfaceMap();
 
-    void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
 
 private:
     Ui::InterfaceMap *ui;
     QGraphicsScene *scene;
 
 
-    vector<vector<QGraphicsItem*>> Polygons;
-    vector<int> indexes;
-
-    vector<QGraphicsItem*> Points;
-
-    bool search(QGraphicsItem*);
-    void createLine();
+    std::vector<int> indexes;
+    vector <QPolygonF> Polygons;
+    QPolygonF Polygon;
 
 protected:
 
 private slots:
     void backToMain();
-    void on_button_CreateLine_clicked();
     void on_button_ClearMap_clicked();
-    void on_button_CreateIndex_clicked();
     void on_button_Save_clicked();
 };
 

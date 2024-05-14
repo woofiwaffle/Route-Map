@@ -3,6 +3,9 @@
 
 #include <QWidget>
 
+#include "headers/interfaceroute.h"
+#include "headers/interfacemap.h"
+
 namespace Ui { class MainWindow; }
 
 
