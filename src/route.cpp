@@ -2,7 +2,7 @@
 
 
 
-//Route::Route(QObject *parent) : QObject(parent), scene(nullptr) {}
+Route::Route(QObject *parent) : QObject(parent), scene(nullptr) {}
 
 
 

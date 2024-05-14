@@ -60,6 +60,7 @@ void InterfaceMap::mousePressEvent(QMouseEvent *event){
             }
         }
         scene->addPolygon(Polygon, pen, Qt::green);
+
         Polygons.push_back(Polygon);
 
         bool ok;
