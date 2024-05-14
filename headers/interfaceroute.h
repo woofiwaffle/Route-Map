@@ -13,7 +13,6 @@
 #include <cmath>
 #include <unordered_map>
 
-
 using namespace std;
 
 
@@ -45,6 +44,8 @@ private:
     int flag = 1;
     QPointF* StartPoint = nullptr;
     QPointF* FinishPoint = nullptr;
+    QGraphicsItem* StartPoint;
+    QGraphicsItem* FinishPoint;
 
     std::vector<int> indexes;
     vector <QPolygonF> Polygons;
@@ -67,6 +68,8 @@ private:
 
 private slots:
     void mousePressEvent(QMouseEvent *);
+    double heuristic(QPointF*, QPointF*);
+
     void backToMain();
     void on_button_LoadingMap_clicked();
     void on_button_StartJourney_clicked();
