@@ -8,19 +8,19 @@
 
 
 
-class MoveItem : public QObject, public QGraphicsItem {
-    Q_OBJECT
+//class MoveItem : public QObject, public QGraphicsItem {
+//    Q_OBJECT
 
-public:
-    explicit MoveItem(QObject *parent = 0);
-    ~MoveItem();
+//public:
+//    explicit MoveItem(QObject *parent = 0);
+//    ~MoveItem();
 
-signals:
-    void pointAdded();
+//signals:
+//    void pointAdded();
 
-private:
-    QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-};
+//private:
+//    QRectF boundingRect() const;
+//    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+//};
 
 #endif // MOVEITEM_H

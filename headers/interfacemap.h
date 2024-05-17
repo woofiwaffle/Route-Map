@@ -34,16 +34,16 @@ public:
 
     void mousePressEvent(QMouseEvent *event);
 
+
 private:
     Ui::InterfaceMap *ui;
     QGraphicsScene *scene;
 
 
+
     std::vector<int> indexes;
     vector <QPolygonF> Polygons;
     QPolygonF Polygon;
-
-protected:
 
 private slots:
     void backToMain();

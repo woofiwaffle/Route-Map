@@ -7,6 +7,7 @@
 MainWindow::MainWindow(QWidget *parent): QWidget(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
+
     connect(ui->button_Route, &QPushButton::clicked, this, &MainWindow::openRouteWindow);
     connect(ui->button_Map, &QPushButton::clicked, this, &MainWindow::openMapWindow);
 }

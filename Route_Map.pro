@@ -33,7 +33,7 @@ DISTFILES += \
     LICENCE \
     README.md \
     src/inputMap.xml \
-    src/savedMap.xml \
+    src/savedRoute.xml \
     docs/example.txt \
     reports/README.md
 

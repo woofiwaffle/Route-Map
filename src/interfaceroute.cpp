@@ -11,7 +11,7 @@ InterfaceRoute::InterfaceRoute(QWidget *parent) : QWidget(parent), ui(new Ui::In
 
     connect(ui->button_Back, &QPushButton::clicked, this, &InterfaceRoute::backToMain);
     connect(ui->button_StartJourney, &QPushButton::clicked, this, &InterfaceRoute::on_button_StartJourney_clicked);
-    connect(ui->button_LoadingMap, &QPushButton::clicked, this, &InterfaceRoute::on_button_LoadingMap_clicked);
+    //connect(ui->button_LoadingMap, &QPushButton::clicked, this, &InterfaceRoute::on_button_LoadingMap_clicked);
     //connect(ui->button_Save, &QPushButton::clicked, this, &InterfaceRoute::on_button_Save_clicked);
 
 
@@ -19,14 +19,14 @@ InterfaceRoute::InterfaceRoute(QWidget *parent) : QWidget(parent), ui(new Ui::In
     scene = new QGraphicsScene(this);   // Инициализируем графическую сцену
     scene->setItemIndexMethod(QGraphicsScene::NoIndex); // настраиваем индексацию элементов
 
-    ui->graphicsView->resize(600,600);  // Устанавливаем размер graphicsView
+    ui->graphicsView->resize(1000,650);  // Устанавливаем размер graphicsView
     ui->graphicsView->setScene(scene);  // Устанавливаем графическую сцену в graphicsView
     ui->graphicsView->setRenderHint(QPainter::Antialiasing);    // Настраиваем рендер
     ui->graphicsView->setCacheMode(QGraphicsView::CacheBackground); // Кэш фона
     ui->graphicsView->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
 
 
-    scene->setSceneRect(ui->graphicsView->x(), ui->graphicsView->y(), 600, 600); // Устанавливаем размер сцены
+    scene->setSceneRect(ui->graphicsView->x(), ui->graphicsView->y(), 1000, 650); // Устанавливаем размер сцены
 }
 
 
@@ -47,48 +47,54 @@ void InterfaceRoute::backToMain() {
 
 void InterfaceRoute::loadMapFromXml(const QString& fileName) {
     QFile file(fileName);
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         return;
     }
 
     QXmlStreamReader reader(&file);
+    QPolygonF currentPolygon;
+    int passIndex = 0;
 
-    while(!reader.atEnd() && !reader.hasError()){
+    while (!reader.atEnd() && !reader.hasError()) {
         QXmlStreamReader::TokenType token = reader.readNext();
-        if(token == QXmlStreamReader::StartElement){
+        if (token == QXmlStreamReader::StartElement) {
             QXmlStreamAttributes attributes = reader.attributes();
-            qreal x = 0, y = 0;
-            int passIndex = 0;
 
-            if(reader.name().toString() == "point"){
-                if(attributes.hasAttribute("x")){
-                    x = attributes.value("x").toString().toDouble();
-                }
-                if(attributes.hasAttribute("y")){
-                    y = attributes.value("y").toString().toDouble();
-                }
-                QPointF point(x,y);
-                Polygon << point;
-            }
-            if(reader.name().toString() == "index"){
+            if (reader.name() == "point") {
+                qreal x = attributes.value("x").toString().toDouble();
+                qreal y = attributes.value("y").toString().toDouble();
+                QPointF point(x, y);
+                currentPolygon << point;
+            } else if (reader.name() == "index") {
                 if (attributes.hasAttribute("id")) {
                     passIndex = attributes.value("id").toInt();
                     indexes.push_back(passIndex);
 
-                    scene->addPolygon(Polygon, QPen(Qt::white), Qt::green);
-                    Polygons.push_back(Polygon);
+                    // Add the polygon to the scene
+                    scene->addPolygon(currentPolygon, QPen(Qt::white), QBrush(Qt::lightGray));
+                    Polygons.push_back(currentPolygon);
 
+                    // Calculate the centroid of the polygon for index positioning
+                    QPointF centroid(0, 0);
+                    for (const QPointF& point : currentPolygon) {
+                        centroid += point;
+                    }
+                    centroid /= currentPolygon.size();
+
+                    // Add index text at the centroid
                     QGraphicsTextItem* indexItem = scene->addText(QString::number(passIndex));
-                    indexItem->setPos(QLineF(Polygon[0].x(), Polygon[0].y(), Polygon[Polygon.size()/2].x(), Polygon[Polygon.size()/2].y()).center());
-                    indexItem->setDefaultTextColor(Qt::red);
-                    Polygon.clear();
+                    indexItem->setPos(centroid);
+                    indexItem->setDefaultTextColor(Qt::blue);
+
+                    // Clear the current polygon for the next one
+                    currentPolygon.clear();
                 }
             }
         }
-
     }
-    if(reader.hasError()){
-        qDebug() << "XML papsing error";
+
+    if (reader.hasError()) {
+        qDebug() << "XML parsing error";
     }
     file.close();
 }
@@ -99,18 +105,6 @@ bool InterfaceRoute::searchPoint(QPointF pt){
         if(Polygons[i].containsPoint(pt, Qt::OddEvenFill)) return true;
     }
     return false;
-}
-
-
-//нахождение среди соседей точек той, у которой cost меньше всех
-Node InterfaceRoute::MinCost(vector<Node> Neighbors){
-    Node Mincost = Neighbors[0];
-    for(Node neighbor : Neighbors){
-        if(neighbor.cost <= Mincost.cost && !searchPoint(neighbor.Point)){
-            Mincost = neighbor;
-        }
-    }
-    return Mincost;
 }
 
 
@@ -126,13 +120,13 @@ int heuristic(int x1, int y1, int x2, int y2) {
 }
 
 
-int InterfaceRoute::findCost(Node* current, Node* start, Node* goal) {
+int InterfaceRoute::findCost(Node* current, Node* goal) {
     if (flag == 1){
         return current->heuristic + 1;
     }
     if(current->Point.x() == goal->Point.x() && current->Point.y() == goal->Point.y()){
         flag = 0;
-        return current->cost;
+        return current->cost + 1;
     }
     if(flag == 0){
         return current->cost - 1;
@@ -140,37 +134,40 @@ int InterfaceRoute::findCost(Node* current, Node* start, Node* goal) {
     return current->cost;
 }
 
-//получение точек-соседей
-std::vector<Node> InterfaceRoute::getNeighbors(Node* node, Node* start, Node* goal, int n) {
+
+
+std::vector<Node> InterfaceRoute::getNeighbors(Node* node, Node* goal, int n) {
     std::vector<Node> neighbors;
     int x = node->Point.x();
     int y = node->Point.y();
-    if (isValid(x + 1, y, n) && !searchPoint(QPointF(x + 1, y)))
-        neighbors.push_back(Node(x + 1, y, heuristic(start->Point.x(), start->Point.y(), x + 1, y), heuristic(x + 1, y, goal->Point.x(), goal->Point.y())));
 
-    if (isValid(x - 1, y, n) && !searchPoint(QPointF(x - 1, y)))
-        neighbors.push_back(Node(x - 1, y, heuristic(start->Point.x(), start->Point.y(), x - 1, y), heuristic(x - 1, y, goal->Point.x(), goal->Point.y())));
+    if (isValid(x + 1, y, n)) {
+        QPointF rightNeighbor(x + 1, y);
+        if (!searchPoint(rightNeighbor))
+            neighbors.push_back(Node(x + 1, y, node->cost + 1, heuristic(x + 1, y, goal->Point.x(), goal->Point.y())));
+    }
 
-    if (isValid(x, y + 1, n) && !searchPoint(QPointF(x, y + 1)))
-        neighbors.push_back(Node(x, y+1, heuristic(start->Point.x(), start->Point.y(), x, y + 1), heuristic(x, y + 1, goal->Point.x(), goal->Point.y())));
+    if (isValid(x - 1, y, n)) {
+        QPointF leftNeighbor(x - 1, y);
+        if (!searchPoint(leftNeighbor))
+            neighbors.push_back(Node(x - 1, y, node->cost + 1, heuristic(x - 1, y, goal->Point.x(), goal->Point.y())));
+    }
 
-    if (isValid(x, y - 1, n) && !searchPoint(QPointF(x, y - 1)))
-        neighbors.push_back(Node(x, y - 1, heuristic(start->Point.x(), start->Point.y(), x, y - 1), heuristic(x, y - 1, goal->Point.x(), goal->Point.y())));
+    if (isValid(x, y + 1, n)) {
+        QPointF downNeighbor(x, y + 1);
+        if (!searchPoint(downNeighbor))
+            neighbors.push_back(Node(x, y + 1, node->cost + 1, heuristic(x, y + 1, goal->Point.x(), goal->Point.y())));
+    }
 
-    if (isValid(x - 1, y - 1, n) && !searchPoint(QPointF(x - 1, y - 1)))
-        neighbors.push_back(Node(x - 1, y - 1, heuristic(start->Point.x(), start->Point.y(), x - 1, y - 1), heuristic(x - 1, y - 1, goal->Point.x(), goal->Point.y())));
-
-    if (isValid(x + 1, y + 1, n) && !searchPoint(QPointF(x + 1, y + 1)))
-        neighbors.push_back(Node(x + 1, y + 1, heuristic(start->Point.x(), start->Point.y(), x + 1, y + 1), heuristic(x + 1, y + 1, goal->Point.x(), goal->Point.y())));
-
-    if (isValid(x - 1, y + 1, n) && !searchPoint(QPointF(x - 1, y + 1)))
-        neighbors.push_back(Node(x - 1, y + 1, heuristic(start->Point.x(), start->Point.y(), x - 1, y + 1), heuristic(x - 1, y + 1, goal->Point.x(), goal->Point.y())));
-
-    if (isValid(x + 1, y - 1, n) && !searchPoint(QPointF(x + 1, y - 1)))
-        neighbors.push_back(Node(x + 1, y - 1, heuristic(start->Point.x(), start->Point.y(), x + 1, y - 1), heuristic(x + 1, y - 1, goal->Point.x(), goal->Point.y())));
+    if (isValid(x, y - 1, n)) {
+        QPointF upNeighbor(x, y - 1);
+        if (!searchPoint(upNeighbor))
+            neighbors.push_back(Node(x, y - 1, node->cost + 1, heuristic(x, y - 1, goal->Point.x(), goal->Point.y())));
+    }
 
     return neighbors;
 }
+
 
 
 //поиск среди точек на повторения (бывают попадания на одних и тех же соседей-точек)
@@ -196,7 +193,7 @@ std::vector<Node> InterfaceRoute::aStar(Node start, Node goal, int n) {
         int currentIndex = 0;
         //Если среди новых точек есть та, у которой расстояние будет меньше рассматриваемой, то рассматриваемую возьмут эту новую точку
         for (int i = 1; i < openSet.size(); i++) {
-            if (openSet[i].cost + openSet[i].heuristic <= current.cost + current.heuristic) {
+            if (openSet[i].cost + openSet[i].heuristic < current.cost + current.heuristic) {
                 current = openSet[i];
                 currentIndex = i;
             }
@@ -208,25 +205,22 @@ std::vector<Node> InterfaceRoute::aStar(Node start, Node goal, int n) {
 
         //Когда путь будет сформирован от начала до конца, то алгоритм будет выводить итог кратчайшего пути
         if (current.Point.x() == goal.Point.x() && current.Point.y() == goal.Point.y()) {
-            std::vector<Node> path;
             qDebug() << closedSet.size() << " " << openSet.size();
-            while (current.Point.x() != start.Point.x() || current.Point.y() != start.Point.y()) {
-                path.push_back(current);
-                visited.push_back(current);
+            std::vector<Node> path;
+            path.push_back(goal);
+            for (int i = closedSet.size()-2; i > 0; i--) {
+                if(closedSet[i].cost <= current.cost && !searchPoint(closedSet[i].Point)){
+                    path.push_back(current);
+                    visited.push_back(current);
 
-                std::vector<Node> Neighbors = getNeighbors(&current, &start, &goal, n);
-
-                for (Node neighbor : Neighbors) {
-                    if((!searchPoint(neighbor.Point) && !searching(visited, neighbor)) && (neighbor.Point.x() == MinCost(Neighbors).Point.x() && neighbor.Point.y() == MinCost(Neighbors).Point.y())){
-                        current = neighbor;
-                    }
+                    current = closedSet[i];
                 }
             }
             path.push_back(start);
             return path;
         }
         //Проверка точек-соседей на нахождение или отсутствие в закрытом(точки конечного пути) и открытом(множество новых нерассмотренных точек) списках
-        std::vector<Node> neighbors = getNeighbors(&current, &start, &goal, n);
+        std::vector<Node> neighbors = getNeighbors(&current, &goal, n);
         for (Node neighbor : neighbors) {
             bool isClosed = false;
             for (Node closedNode : closedSet) {
@@ -241,18 +235,15 @@ std::vector<Node> InterfaceRoute::aStar(Node start, Node goal, int n) {
                 for (Node openNode : openSet) {
                     if (openNode.Point.x() == neighbor.Point.x() && openNode.Point.y() == neighbor.Point.y()) {
                         isOpen = true;
-                        if (findCost(&current, &start, &goal) < findCost(&openNode, &start, &goal) && flag == 1) {
-                            openNode.cost = findCost(&current, &start, &goal);
-                        }
-                        else if((findCost(&current, &start, &goal) > findCost(&openNode, &start, &goal) && flag == 0)) {
-                            openNode.cost = findCost(&current, &start, &goal);
+                        if (current.cost < openNode.cost) {
+                            openNode.cost = current.cost;
                         }
                         break;
                     }
                 }
 
                 if (!isOpen) {
-                    neighbor.cost = findCost(&current, &start, &goal);
+                    neighbor.cost = current.cost;
                     openSet.push_back(neighbor);
                 }
             }
@@ -262,6 +253,12 @@ std::vector<Node> InterfaceRoute::aStar(Node start, Node goal, int n) {
     return std::vector<Node>();
 }
 
+
+
+
+double InterfaceRoute::distance(QPointF* current, QPointF* neighbor) {
+    return std::sqrt(std::pow(current->x() - neighbor->x(), 2) + std::pow(current->y() - neighbor->y(), 2));
+}
 
 
 
@@ -280,20 +277,117 @@ void InterfaceRoute::on_button_LoadingMap_clicked() {
 
 
 void InterfaceRoute::on_button_StartJourney_clicked() {
-    if(StartPoint && FinishPoint){
-        //findOptimalRoute(StartPoint, FinishPoint);
+    if (StartPoint && FinishPoint) {
+        // Проверяем, находятся ли стартовая и конечная точки внутри препятствий
+        if (searchPoint(*StartPoint) || searchPoint(*FinishPoint)) {
+            qDebug() << "Start or finish point cannot be set on an obstacle";
+            return;
+        }
+
         Node Start(StartPoint->x(), StartPoint->y(), 0, heuristic(StartPoint->x(), StartPoint->y(), FinishPoint->x(), FinishPoint->y()));
         Node Finish(FinishPoint->x(), FinishPoint->y(), 0, 0);
-        std::vector<Node> path = aStar(Start, Finish, n);
-        qDebug() << path.size();
-        for(int i = 0; i < path.size()-2; i++){
-            QLineF line(path[i].Point.x(), path[i].Point.y(), path[i+1].Point.x(), path[i+1].Point.y());
-            scene->addLine(line, QPen(Qt::red));
+        if (aStar(Start, Finish, n).size() < aStar(Finish, Start, n).size()) {
+            WayPoints = aStar(Start, Finish, n);
         }
+        else {
+            WayPoints = aStar(Finish, Start, n);
+        }
+
+        qDebug() << WayPoints.size();
+
+        for (int i = 0; i < WayPoints.size() - 2; i++) {
+            QLineF line(WayPoints[i].Point.x(), WayPoints[i].Point.y(), WayPoints[i + 1].Point.x(), WayPoints[i + 1].Point.y());
+            scene->addLine(line, QPen(Qt::yellow, 2));
+        }
+
+        QGraphicsEllipseItem *startEllipse = new QGraphicsEllipseItem(StartPoint->x() - 7, StartPoint->y() - 7, 15, 15);
+        startEllipse->setBrush(Qt::green);
+        scene->addItem(startEllipse);
+
+        QGraphicsEllipseItem *finishEllipse = new QGraphicsEllipseItem(FinishPoint->x() - 5, FinishPoint->y() - 7, 15, 15);
+        finishEllipse->setBrush(Qt::red);
+        scene->addItem(finishEllipse);
     }
-    else{
+    else {
         qDebug() << "Start and/or finish point not set";
     }
+}
+
+
+
+void InterfaceRoute::on_button_ClearWay_clicked(){
+    for(QGraphicsItem* item : scene->items()){
+        QGraphicsEllipseItem* PointItem = dynamic_cast<QGraphicsEllipseItem*>(item);
+        QGraphicsLineItem* lineItem = dynamic_cast<QGraphicsLineItem*>(item);
+        if(PointItem){
+            delete item;
+        }
+        else if(lineItem){
+            delete item;
+        }
+    }
+    WayPoints.clear();
+    StartPoint = nullptr;
+    FinishPoint = nullptr;
+}
+
+
+
+void InterfaceRoute::on_button_Save_clicked() {
+    if (WayPoints.empty()) {
+        QMessageBox::warning(this, tr("Ошибка"), tr("Нет маршрута для сохранения."));
+        return;
+    }
+
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Сохранить маршрут"), "", tr("XML файлы (*.xml)"));
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly)) {
+        QMessageBox::warning(this, tr("Ошибка"), tr("Не удалось открыть файл для записи."));
+        return;
+    }
+
+    QXmlStreamWriter xmlWriter(&file);
+    xmlWriter.setAutoFormatting(true);
+    xmlWriter.writeStartDocument();
+    xmlWriter.writeStartElement("Route");
+
+    double totalDistance = 0.0;
+    double totalTime = 0.0;
+    const double averageSpeed = 5.0; // Средняя скорость в м/с (примерное значение)
+
+    xmlWriter.writeStartElement("WayPoints");
+    for (size_t i = 0; i < WayPoints.size(); ++i) {
+        Node& node = WayPoints[i];
+        xmlWriter.writeStartElement("WayPoint");
+        xmlWriter.writeAttribute("x", QString::number(node.Point.x()));
+        xmlWriter.writeAttribute("y", QString::number(node.Point.y()));
+        xmlWriter.writeAttribute("cost", QString::number(node.cost));
+        xmlWriter.writeAttribute("heuristic", QString::number(node.heuristic));
+        xmlWriter.writeEndElement(); // WayPoint
+
+        if (i > 0) {
+            totalDistance += distance(&WayPoints[i-1].Point, &node.Point);
+        }
+    }
+    xmlWriter.writeEndElement(); // WayPoints
+
+    totalTime = totalDistance / averageSpeed;
+
+    xmlWriter.writeStartElement("Statistics");
+    xmlWriter.writeTextElement("TotalDistance", QString::number(totalDistance));
+    xmlWriter.writeTextElement("TotalTime", QString::number(totalTime));
+    xmlWriter.writeTextElement("AverageSpeed", QString::number(averageSpeed));
+    xmlWriter.writeEndElement(); // Statistics
+
+    xmlWriter.writeEndElement(); // Route
+    xmlWriter.writeEndDocument();
+
+    file.close();
+    QMessageBox::information(this, tr("Сохранение завершено"), tr("Маршрут успешно сохранен в файл."));
 }
 
 
@@ -319,53 +413,3 @@ void InterfaceRoute::mousePressEvent(QMouseEvent *event){
         }
     }
 }
-
-
-
-/*
-// Вычисление эвристической оценки (евклидово расстояние) от текущей точки до конечной точки
-double InterfaceRoute::heuristic(QPointF* current, QPointF* finish) {
-    return QLineF(current->x(), current->y(), finish->x(), finish->y()).length();
-}
-
-// Получение списка соседних точек для данной точки на карте
-vector<QPointF*> InterfaceRoute::getNeighbors(QPointF* current) {
-    vector<QPointF*> neighbors;
-    int x = current->x() / 10; // Размер ячейки на карте
-    int y = current->y() / 10;
-
-    // Проверяем соседние клетки по горизонтали и вертикали
-    for (int dx = -1; dx <= 1; dx++) {
-        for (int dy = -1; dy <= 1; dy++) {
-            if (dx == 0 && dy == 0) continue; // Пропускаем текущую точку
-
-            int nx = x + dx;
-            int ny = y + dy;
-
-            if (nx >= 0 && nx < 10 && ny >= 0 && ny < 10) { // Проверяем, что соседние клетки находятся в пределах карты
-                QPointF* neighbor = new QPointF(nx * 10, ny * 10);
-                neighbors.push_back(neighbor);
-            }
-        }
-    }
-    // Реализуйте ваш код здесь, чтобы определить соседние точки для данной точки на карте
-    return neighbors;
-}
-
-// Вычисление стоимости перемещения между двумя точками
-double InterfaceRoute::distance(QPointF* current, QPointF* neighbor) {
-    return QLineF(current->x(), current->y(), neighbor->x(), neighbor->y()).length();
-}
-
-// Восстановление оптимального пути, начиная с конечной точки и перемещаясь к начальной точке по указанным родителям узлов
-vector<QPointF*> InterfaceRoute::reconstructPath(Node* endNode) {
-    vector<QPointF*> path;
-    Node* current = endNode;
-    while (current != nullptr) {
-        //path.push_back(current->item);
-        //current = current->parent;
-    }
-    std::reverse(path.begin(), path.end()); // Переворачиваем путь, чтобы он начинался с начальной точки
-    return path;
-}
-*/

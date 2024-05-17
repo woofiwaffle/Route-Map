@@ -1,25 +1,25 @@
-#include "headers/moveitem.h"
+//#include "headers/moveitem.h"
 
-MoveItem::MoveItem(QObject *parent) : QObject(parent), QGraphicsItem() {}
+//MoveItem::MoveItem(QObject *parent) : QObject(parent), QGraphicsItem() {}
 
-MoveItem::~MoveItem() {}
-
-
-
-QRectF MoveItem::boundingRect() const {
-    return QRectF (-30,-30,60,60);
-}
+//MoveItem::~MoveItem() {}
 
 
 
-void MoveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-    painter->setPen(Qt::green);
-    painter->setBrush(Qt::green);
-    painter->drawPoint(0,0);
+//QRectF MoveItem::boundingRect() const {
+//    return QRectF (-30,-30,60,60);
+//}
 
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
-}
+
+
+//void MoveItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+//    painter->setPen(Qt::green);
+//    painter->setBrush(Qt::green);
+//    painter->drawPoint(0,0);
+
+//    Q_UNUSED(option);
+//    Q_UNUSED(widget);
+//}
 
 
 //int MoveItem::passIndex() const {
