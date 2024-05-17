@@ -1,8 +1,8 @@
-#include "headers/route.h"
+//#include "headers/route.h"
 
 
 
-Route::Route(QObject *parent) : QObject(parent), scene(nullptr) {}
+//Route::Route(QObject *parent) : QObject(parent), scene(nullptr) {}
 
 
 
