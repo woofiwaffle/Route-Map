@@ -20,10 +20,10 @@ using namespace std;
 
 struct Node {
     QPointF Point;
-    int cost;
+    double cost;
     int heuristic;
 
-    Node(int x, int y, int cost, int heuristic)
+    Node(int x, int y, double cost, int heuristic)
         : Point(x, y), cost(cost), heuristic(heuristic) {}
 };
 
@@ -48,19 +48,17 @@ private:
 
     std::vector<int> indexes;
     vector <QPolygonF> Polygons;
+    vector<Node> WayPoints;
     QPolygonF Polygon;
 
     void loadMapFromXml(const QString& fileName);
     void findOptimalRoute(QPointF* start, QPointF* finish);
-    //double heuristic(QPointF* current, QPointF* finish);
-    //vector<QPointF*> getNeighbors(QPointF* current);
     double distance(QPointF* current, QPointF* neighbor);
     vector<QPointF*> reconstructPath(Node* endNode);
 
 
     int findCost(Node*, Node*, Node*);
     std::vector<Node> getNeighbors(Node*, Node*, Node*, int);
-    Node MinCost(vector<Node>);
     bool searchPoint(QPointF);
     std::vector<Node> aStar(Node, Node, int);
 
@@ -71,6 +69,7 @@ private slots:
     void on_button_LoadingMap_clicked();
     void on_button_StartJourney_clicked();
     //void on_button_Save_clicked();
+    void on_button_ClearWay_clicked();
 };
 
 

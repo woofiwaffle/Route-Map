@@ -102,18 +102,6 @@ bool InterfaceRoute::searchPoint(QPointF pt){
 }
 
 
-//нахождение среди соседей точек той, у которой cost меньше всех
-Node InterfaceRoute::MinCost(vector<Node> Neighbors){
-    Node Mincost = Neighbors[0];
-    for(Node neighbor : Neighbors){
-        if(neighbor.cost <= Mincost.cost && !searchPoint(neighbor.Point)){
-            Mincost = neighbor;
-        }
-    }
-    return Mincost;
-}
-
-
 
 //установка границ на создание соседних точек
 bool isValid(int x, int y, int n) {
@@ -132,7 +120,7 @@ int InterfaceRoute::findCost(Node* current, Node* start, Node* goal) {
     }
     if(current->Point.x() == goal->Point.x() && current->Point.y() == goal->Point.y()){
         flag = 0;
-        return current->cost;
+        return current->cost + 1;
     }
     if(flag == 0){
         return current->cost - 1;
@@ -146,28 +134,28 @@ std::vector<Node> InterfaceRoute::getNeighbors(Node* node, Node* start, Node* go
     int x = node->Point.x();
     int y = node->Point.y();
     if (isValid(x + 1, y, n) && !searchPoint(QPointF(x + 1, y)))
-        neighbors.push_back(Node(x + 1, y, heuristic(start->Point.x(), start->Point.y(), x + 1, y), heuristic(x + 1, y, goal->Point.x(), goal->Point.y())));
+        neighbors.push_back(Node(x + 1, y, findCost(node,start,goal), heuristic(x + 1, y, goal->Point.x(), goal->Point.y())));
 
     if (isValid(x - 1, y, n) && !searchPoint(QPointF(x - 1, y)))
-        neighbors.push_back(Node(x - 1, y, heuristic(start->Point.x(), start->Point.y(), x - 1, y), heuristic(x - 1, y, goal->Point.x(), goal->Point.y())));
+        neighbors.push_back(Node(x - 1, y, findCost(node,start,goal), heuristic(x - 1, y, goal->Point.x(), goal->Point.y())));
 
     if (isValid(x, y + 1, n) && !searchPoint(QPointF(x, y + 1)))
-        neighbors.push_back(Node(x, y+1, heuristic(start->Point.x(), start->Point.y(), x, y + 1), heuristic(x, y + 1, goal->Point.x(), goal->Point.y())));
+        neighbors.push_back(Node(x, y + 1, findCost(node,start,goal), heuristic(x, y + 1, goal->Point.x(), goal->Point.y())));
 
-    if (isValid(x, y - 1, n) && !searchPoint(QPointF(x, y - 1)))
-        neighbors.push_back(Node(x, y - 1, heuristic(start->Point.x(), start->Point.y(), x, y - 1), heuristic(x, y - 1, goal->Point.x(), goal->Point.y())));
+    if (isValid(x, y + 1, n) && !searchPoint(QPointF(x, y + 1)))
+        neighbors.push_back(Node(x, y - 1, findCost(node,start,goal), heuristic(x, y - 1, goal->Point.x(), goal->Point.y())));
 
     if (isValid(x - 1, y - 1, n) && !searchPoint(QPointF(x - 1, y - 1)))
-        neighbors.push_back(Node(x - 1, y - 1, heuristic(start->Point.x(), start->Point.y(), x - 1, y - 1), heuristic(x - 1, y - 1, goal->Point.x(), goal->Point.y())));
+        neighbors.push_back(Node(x - 1, y - 1, findCost(node,start,goal) + 0.4, heuristic(x - 1, y - 1, goal->Point.x(), goal->Point.y())));
 
     if (isValid(x + 1, y + 1, n) && !searchPoint(QPointF(x + 1, y + 1)))
-        neighbors.push_back(Node(x + 1, y + 1, heuristic(start->Point.x(), start->Point.y(), x + 1, y + 1), heuristic(x + 1, y + 1, goal->Point.x(), goal->Point.y())));
+        neighbors.push_back(Node(x + 1, y + 1, findCost(node,start,goal)+ 0.4, heuristic(x + 1, y + 1, goal->Point.x(), goal->Point.y())));
 
     if (isValid(x - 1, y + 1, n) && !searchPoint(QPointF(x - 1, y + 1)))
-        neighbors.push_back(Node(x - 1, y + 1, heuristic(start->Point.x(), start->Point.y(), x - 1, y + 1), heuristic(x - 1, y + 1, goal->Point.x(), goal->Point.y())));
+        neighbors.push_back(Node(x - 1, y + 1, findCost(node,start,goal)+ 0.4, heuristic(x - 1, y + 1, goal->Point.x(), goal->Point.y())));
 
     if (isValid(x + 1, y - 1, n) && !searchPoint(QPointF(x + 1, y - 1)))
-        neighbors.push_back(Node(x + 1, y - 1, heuristic(start->Point.x(), start->Point.y(), x + 1, y - 1), heuristic(x + 1, y - 1, goal->Point.x(), goal->Point.y())));
+        neighbors.push_back(Node(x + 1, y - 1, findCost(node,start,goal)+ 0.4, heuristic(x + 1, y - 1, goal->Point.x(), goal->Point.y())));
 
     return neighbors;
 }
@@ -196,7 +184,7 @@ std::vector<Node> InterfaceRoute::aStar(Node start, Node goal, int n) {
         int currentIndex = 0;
         //Если среди новых точек есть та, у которой расстояние будет меньше рассматриваемой, то рассматриваемую возьмут эту новую точку
         for (int i = 1; i < openSet.size(); i++) {
-            if (openSet[i].cost + openSet[i].heuristic <= current.cost + current.heuristic) {
+            if (openSet[i].cost + openSet[i].heuristic < current.cost + current.heuristic) {
                 current = openSet[i];
                 currentIndex = i;
             }
@@ -208,21 +196,15 @@ std::vector<Node> InterfaceRoute::aStar(Node start, Node goal, int n) {
 
         //Когда путь будет сформирован от начала до конца, то алгоритм будет выводить итог кратчайшего пути
         if (current.Point.x() == goal.Point.x() && current.Point.y() == goal.Point.y()) {
-            std::vector<Node> path;
             qDebug() << closedSet.size() << " " << openSet.size();
-            while (current.Point.x() != start.Point.x() || current.Point.y() != start.Point.y()) {
-                path.push_back(current);
-                visited.push_back(current);
+            std::vector<Node> path;
+            path.push_back(goal);
+            for (int i = closedSet.size()-2; i > 0; i--) {
+                if(closedSet[i].cost <= current.cost && !searchPoint(closedSet[i].Point)){
+                    path.push_back(current);
+                    visited.push_back(current);
 
-                std::vector<Node> Neighbors = getNeighbors(&current, &start, &goal, n);
-
-                for (Node neighbor : Neighbors) {
-                    if((!searchPoint(neighbor.Point) && !searching(visited, neighbor)) && (neighbor.Point.x() == MinCost(Neighbors).Point.x() && neighbor.Point.y() == MinCost(Neighbors).Point.y())){
-                        current = neighbor;
-                    }
-                    else if (!searchPoint(neighbor.Point) && !searching(visited, neighbor)){
-                        current = neighbor;
-                    }
+                    current = closedSet[i];
                 }
             }
             path.push_back(start);
@@ -244,18 +226,15 @@ std::vector<Node> InterfaceRoute::aStar(Node start, Node goal, int n) {
                 for (Node openNode : openSet) {
                     if (openNode.Point.x() == neighbor.Point.x() && openNode.Point.y() == neighbor.Point.y()) {
                         isOpen = true;
-                        if (findCost(&current, &start, &goal) < findCost(&openNode, &start, &goal) && flag == 1) {
-                            openNode.cost = findCost(&current, &start, &goal);
-                        }
-                        else if((findCost(&current, &start, &goal) > findCost(&openNode, &start, &goal) && flag == 0)) {
-                            openNode.cost = findCost(&current, &start, &goal);
+                        if (current.cost < openNode.cost) {
+                            openNode.cost = current.cost;
                         }
                         break;
                     }
                 }
 
                 if (!isOpen) {
-                    neighbor.cost = findCost(&current, &start, &goal);
+                    neighbor.cost = current.cost;
                     openSet.push_back(neighbor);
                 }
             }
@@ -284,19 +263,42 @@ void InterfaceRoute::on_button_LoadingMap_clicked() {
 
 void InterfaceRoute::on_button_StartJourney_clicked() {
     if(StartPoint && FinishPoint){
-        //findOptimalRoute(StartPoint, FinishPoint);
         Node Start(StartPoint->x(), StartPoint->y(), 0, heuristic(StartPoint->x(), StartPoint->y(), FinishPoint->x(), FinishPoint->y()));
         Node Finish(FinishPoint->x(), FinishPoint->y(), 0, 0);
-        std::vector<Node> path = aStar(Start, Finish, n);
-        qDebug() << path.size();
-        for(int i = 0; i < path.size()-2; i++){
-            QLineF line(path[i].Point.x(), path[i].Point.y(), path[i+1].Point.x(), path[i+1].Point.y());
+        if(aStar(Start, Finish, n).size() < aStar(Finish, Start, n).size()){
+            WayPoints = aStar(Start, Finish, n);
+        }
+        else{
+             WayPoints = aStar(Finish, Start, n);
+        }
+
+        qDebug() << WayPoints.size();
+        for(int i = 0; i < WayPoints.size()-2; i++){
+            QLineF line(WayPoints[i].Point.x(), WayPoints[i].Point.y(), WayPoints[i+1].Point.x(), WayPoints[i+1].Point.y());
             scene->addLine(line, QPen(Qt::red));
         }
     }
     else{
         qDebug() << "Start and/or finish point not set";
     }
+}
+
+
+
+void InterfaceRoute::on_button_ClearWay_clicked(){
+    for(QGraphicsItem* item : scene->items()){
+        QGraphicsEllipseItem* PointItem = dynamic_cast<QGraphicsEllipseItem*>(item);
+        QGraphicsLineItem* lineItem = dynamic_cast<QGraphicsLineItem*>(item);
+        if(PointItem){
+            delete item;
+        }
+        else if(lineItem){
+            delete item;
+        }
+    }
+    WayPoints.clear();
+    StartPoint = nullptr;
+    FinishPoint = nullptr;
 }
 
 
@@ -322,65 +324,6 @@ void InterfaceRoute::mousePressEvent(QMouseEvent *event){
         }
     }
 }
-
-
-
-/*
-// Вычисление эвристической оценки (евклидово расстояние) от текущей точки до конечной точки
-double InterfaceRoute::heuristic(QPointF* current, QPointF* finish) {
-    return QLineF(current->x(), current->y(), finish->x(), finish->y()).length();
-}
-
-// Получение списка соседних точек для данной точки на карте
-vector<QPointF*> InterfaceRoute::getNeighbors(QPointF* current) {
-    vector<QPointF*> neighbors;
-    int x = current->x() / 10; // Размер ячейки на карте
-    int y = current->y() / 10;
-
-    // Проверяем соседние клетки по горизонтали и вертикали
-    for (int dx = -1; dx <= 1; dx++) {
-        for (int dy = -1; dy <= 1; dy++) {
-            if (dx == 0 && dy == 0) continue; // Пропускаем текущую точку
-
-            int nx = x + dx;
-            int ny = y + dy;
-
-            if (nx >= 0 && nx < 10 && ny >= 0 && ny < 10) { // Проверяем, что соседние клетки находятся в пределах карты
-                QPointF* neighbor = new QPointF(nx * 10, ny * 10);
-                neighbors.push_back(neighbor);
-            }
-        }
-    }
-    // Реализуйте ваш код здесь, чтобы определить соседние точки для данной точки на карте
-    return neighbors;
-}
-
-// Вычисление стоимости перемещения между двумя точками
-double InterfaceRoute::distance(QPointF* current, QPointF* neighbor) {
-    return QLineF(current->x(), current->y(), neighbor->x(), neighbor->y()).length();
-}
-
-// Восстановление оптимального пути, начиная с конечной точки и перемещаясь к начальной точке по указанным родителям узлов
-vector<QPointF*> InterfaceRoute::reconstructPath(Node* endNode) {
-    vector<QPointF*> path;
-    Node* current = endNode;
-    while (current != nullptr) {
-        //path.push_back(current->item);
-        //current = current->parent;
-    }
-    std::reverse(path.begin(), path.end()); // Переворачиваем путь, чтобы он начинался с начальной точки
-    return path;
-}
-*/
-
-
-
-
-
-
-
-
-
 
 
 
