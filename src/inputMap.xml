@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map>
     <obstacle>
-        <point x="682" y="151"/>
-        <point x="639" y="379"/>
-        <point x="393" y="257"/>
-        <index id="56"/>
+        <point x="702" y="101"/>
+        <point x="710" y="341"/>
+        <point x="313" y="187"/>
+        <index id="45"/>
     </obstacle>
     <obstacle>
-        <point x="176" y="170"/>
-        <point x="312" y="455"/>
-        <point x="157" y="423"/>
-        <index id="44"/>
-    </obstacle>
-    <obstacle>
-        <point x="823" y="123"/>
-        <point x="828" y="419"/>
-        <point x="683" y="424"/>
-        <index id="44"/>
+        <point x="248" y="224"/>
+        <point x="344" y="448"/>
+        <point x="93" y="381"/>
+        <index id="12"/>
     </obstacle>
 </map>

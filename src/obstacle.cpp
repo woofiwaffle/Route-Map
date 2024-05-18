@@ -20,9 +20,9 @@ void Obstacle::finalizePolygon(QGraphicsScene *scene) {
     Polygons.push_back(Polygon);
 
     bool ok;
-    int passIndex = QInputDialog::getInt(nullptr, "Create Index", "Enter index (1 - 100)", 0, 0, 100, 1, &ok);
+    int passIndex = QInputDialog::getInt(nullptr, "Create Index", "Enter index (1 - 100)", 0, 1, 100, 1, &ok);
     if (ok) {
-        // Calculate the centroid of the polygon
+        // Calculate the centroid of the polygon;
         QPointF centroid(0, 0);
         double signedArea = 0.0;
         double x0 = 0.0; // x-coordinate of the current vertex
@@ -46,10 +46,19 @@ void Obstacle::finalizePolygon(QGraphicsScene *scene) {
         centroid.rx() /= (6.0 * signedArea);
         centroid.ry() /= (6.0 * signedArea);
 
-        // Add the index text to the centroid
         QGraphicsTextItem* indexItem = scene->addText(QString::number(passIndex));
         indexItem->setPos(centroid);
-        indexItem->setDefaultTextColor(Qt::blue);
+
+         // Установка цвета в зависимости от значения индекса
+        if(passIndex <= 40){
+           indexItem->setDefaultTextColor(Qt::darkGreen);  // Зелёный для значений <= 40
+        }
+        else if(passIndex <= 70){
+            indexItem->setDefaultTextColor(Qt::darkYellow); // Жёлтый для значений 41-70
+        }
+        else{
+            indexItem->setDefaultTextColor(Qt::darkRed);    // Красный для значений > 70
+        }
         indexes.push_back(passIndex);
     }
     Polygon.clear();
@@ -102,4 +111,3 @@ void Obstacle::saveToXml() {
 
     QMessageBox::information(nullptr, "Сохранение завершено", "Карта успешно сохранена в файл.");
 }
-

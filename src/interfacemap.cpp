@@ -8,6 +8,23 @@ InterfaceMap::InterfaceMap(QWidget *parent) : QWidget(parent), ui(new Ui::Interf
     ui->setupUi(this);
     setWindowTitle("Map Editor");
 
+    QString buttonStyle = "QPushButton {"
+                              " background-color: #333333;"
+                              " color: #FFFFFF;"
+                              " border: 1px solid #FFFFFF;"
+                              " border-radius: 5px;"
+                              " padding: 10px;"
+                              "}"
+                              "QPushButton:hover {"
+                              " background-color: #444444;"
+                              "}"
+                              "QPushButton:pressed {"
+                              " background-color: #666666;"
+                              "}";
+    ui->button_Back->setStyleSheet(buttonStyle);
+    ui->button_ClearMap->setStyleSheet(buttonStyle);
+    ui->button_Save->setStyleSheet(buttonStyle);
+
     connect(ui->button_Back, &QPushButton::clicked, this, &InterfaceMap::backToMain);
     connect(ui->button_ClearMap, &QPushButton::clicked, this, &InterfaceMap::on_button_ClearMap_clicked);
 
@@ -43,7 +60,10 @@ void InterfaceMap::backToMain() {
 void InterfaceMap::mousePressEvent(QMouseEvent *event) {
     if(event->button() == Qt::LeftButton) {
        QPointF point(-ui->graphicsView->x() + event->pos().x(), -ui->graphicsView->y() + event->pos().y());
-       QGraphicsItem* pointItem = new QGraphicsEllipseItem(0, 0, 2, 2);
+       QGraphicsEllipseItem* pointItem = new QGraphicsEllipseItem(0, 0, 10, 10);
+
+       QPen pen(Qt::white);
+       pointItem->setPen(pen);
        pointItem->setPos(point);
        scene->addItem(pointItem);
        obstacle.addPointToPolygon(point);
