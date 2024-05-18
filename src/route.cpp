@@ -1,152 +1,219 @@
-//#include "headers/route.h"
+#include "headers/route.h"
+using namespace std;
+
+void Route::loadMapFromXml(const QString& fileName, QGraphicsScene* scene) {
+    QFile file(fileName);
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        return;
+    }
+
+    QXmlStreamReader reader(&file);
+    QPolygonF currentPolygon;
+    int passIndex = 0;
+
+    while(!reader.atEnd() && !reader.hasError()){
+        QXmlStreamReader::TokenType token = reader.readNext();
+        if(token == QXmlStreamReader::StartElement){
+            QXmlStreamAttributes attributes = reader.attributes();
+
+            if(reader.name() == "point"){
+                qreal x = attributes.value("x").toString().toDouble();
+                qreal y = attributes.value("y").toString().toDouble();
+                QPointF point(x, y);
+                currentPolygon << point;
+            }
+            else if (reader.name() == "index"){
+                if(attributes.hasAttribute("id")){
+                    passIndex = attributes.value("id").toInt();
+                    obstacle.indexes.push_back(passIndex);
+
+                    // Add the polygon to the scene
+                    scene->addPolygon(currentPolygon, QPen(Qt::white), QBrush(Qt::lightGray));
+                    Polygons.push_back(currentPolygon);
+
+                    // Calculate the centroid of the polygon for index positioning
+                    QPointF centroid(0, 0);
+                    for (const QPointF& point : currentPolygon) {
+                        centroid += point;
+                    }
+                    centroid /= currentPolygon.size();
+
+                    // Add index text at the centroid
+                    QGraphicsTextItem* indexItem = scene->addText(QString::number(passIndex));
+                    indexItem->setPos(centroid);
+                    if(passIndex <= 40){
+                       indexItem->setDefaultTextColor(Qt::darkGreen);  // Зелёный для значений <= 40
+                    }
+                    else if(passIndex <= 70){
+                        indexItem->setDefaultTextColor(Qt::darkYellow); // Жёлтый для значений 41-70
+                    }
+                    else{
+                        indexItem->setDefaultTextColor(Qt::darkRed);    // Красный для значений > 70
+                    }
+
+                    // Clear the current polygon for the next one
+                    currentPolygon.clear();
+                }
+            }
+        }
+    }
+
+    if (reader.hasError()) {
+        qDebug() << "XML parsing error";
+    }
+    file.close();
+}
+
+
+//проверка, является ли точка в полигоне
+bool Route::searchPoint(QPointF pt){
+    for(size_t i = 0; i < Polygons.size(); i++){
+        if(Polygons[i].containsPoint(pt, Qt::OddEvenFill)) return true;
+    }
+    return false;
+}
+
+
+//установка границ на создание соседних точек
+bool isValid(int x, int y, int n) {
+    return (x >= 0 && x < n&& y >= 0 && y < n);
+}
+
+
+//вычисление евристической величины ( расстояния до конечной точки)
+int Route::heuristic(int x1, int y1, int x2, int y2) {
+    int dx = abs(x1 - x2);
+    int dy = abs(y1 - y2);
+    return 10 * (dx + dy) + (14 - 2 * 10) * std::min(dx, dy);
+}
 
 
 
-//Route::Route(QObject *parent) : QObject(parent), scene(nullptr) {}
+int Route::findCost(Node* current, Node* goal) {
+    if(flag == 1){
+        return current->heuristic + 1;
+    }
+    if(current->Point.x() == goal->Point.x() && current->Point.y() == goal->Point.y()){
+        flag = 0;
+        return current->cost + 1;
+    }
+    if(flag == 0){
+        return current->cost - 1;
+    }
+    return current->cost;
+}
+
+
+//поиск среди точек на повторения (бывают попадания на одних и тех же соседей-точек)
+bool searching(std::vector<Node> visited, Node current) {
+    return std::find_if(visited.begin(), visited.end(), [&](Node& obj){
+        return obj.Point.x() == current.Point.x() && obj.Point.y() == current.Point.y();
+    }) != visited.end();
+}
+
+
+// алгоритм A*
+std::vector<Node> Route::aStar(Node start, Node goal, int n) {
+    std::vector<Node> closedSet;
+    std::vector<Node> openSet;
+    std::vector<Node> visited;
+    openSet.emplace_back(start);
+
+    while(!openSet.empty()){
+        Node current = openSet[0];
+        int currentIndex = 0;
+        //Если среди новых точек есть та, у которой расстояние будет меньше рассматриваемой, то рассматриваемую возьмут эту новую точку
+        for(int i = 1; i < openSet.size(); i++){
+            if(openSet[i].cost + openSet[i].heuristic < current.cost + current.heuristic){
+                current = openSet[i];
+                currentIndex = i;
+            }
+        }
+
+        openSet.erase(openSet.begin() + currentIndex);
+        closedSet.push_back(current);
+
+
+        //Когда путь будет сформирован от начала до конца, то алгоритм будет выводить итог кратчайшего пути
+        if(current.Point.x() == goal.Point.x() && current.Point.y() == goal.Point.y()){
+            qDebug() << closedSet.size() << " " << openSet.size();
+            std::vector<Node> path;
+            path.push_back(goal);
+            for(int i = closedSet.size()-2; i > 0; i--){
+                if(closedSet[i].cost <= current.cost && !searchPoint(closedSet[i].Point)){
+                    path.push_back(current);
+                    visited.push_back(current);
+
+                    current = closedSet[i];
+                }
+            }
+            path.push_back(start);
+            return path;
+        }
+        //Проверка точек-соседей на нахождение или отсутствие в закрытом(точки конечного пути) и открытом(множество новых нерассмотренных точек) списках
+        std::vector<Node> neighbors = getNeighbors(&current, &goal, n);
+        for(Node neighbor : neighbors){
+            if(!searchPoint(neighbor.Point)){
+               bool isClosed = false;
+               for(Node closedNode : closedSet){
+                   if(closedNode.Point.x() == neighbor.Point.x() && closedNode.Point.y() == neighbor.Point.y()){
+                      isClosed = true;
+                      break;
+                   }
+               }
+
+               if(!isClosed){
+                  bool isOpen = false;
+                  for(Node& openNode : openSet){
+                     if(openNode.Point.x() == neighbor.Point.x() && openNode.Point.y() == neighbor.Point.y()){
+                        isOpen = true;
+                        if(current.cost < openNode.cost){
+                           openNode.cost = current.cost;
+                        }
+                        break;
+                     }
+                  }
+
+                  if(!isOpen){
+                     neighbor.cost = current.cost;
+                     openSet.emplace_back(neighbor);
+                  }
+              }
+          }
+       }
+    }
+
+    return std::vector<Node>();
+}
 
 
 
-//void Route::loadMapFromXml(const QString& fileName) {
-//    vector<QGraphicsItem*> Polygon;
-//    QFile file(fileName);
-//    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-//        return;
-//    }
-
-//    QXmlStreamReader reader(&file);
-
-//    while(!reader.atEnd() && !reader.hasError()){
-//        QXmlStreamReader::TokenType token = reader.readNext();
-//        if(token == QXmlStreamReader::StartElement){
-//            QXmlStreamAttributes attributes = reader.attributes();
-//            qreal x = 0, y = 0;
-//            int passIndex = 0;
-
-//            if(reader.name().toString() == "point"){
-//                if(attributes.hasAttribute("x")){
-//                    x = attributes.value("x").toString().toDouble();
-//                }
-//                if(attributes.hasAttribute("y")){
-//                    y = attributes.value("y").toString().toDouble();
-//                }
-//                MoveItem *moveItem = new MoveItem();
-//                Polygon.push_back(moveItem);
-//                moveItem->setPos(x, y);
-
-//                scene->addItem(moveItem);
-//            }
-//            if(reader.name().toString() == "index"){
-//                if (attributes.hasAttribute("id")) {
-//                    passIndex = attributes.value("id").toInt();
-//                    indexes.push_back(passIndex);
-//                    Polygons.push_back(Polygon);
-//                    Polygon.clear();
-//                }
-//                //moveItem->setPassIndex(passIndex);
-//            }
-//        }
-//    }
-//    if(reader.hasError()){
-//        qDebug() << "XML papsing error";
-//    }
-
-//    /*QPainter *painter;
-//    QPolygon Pol;
-//    for(int i = 0; i < Polygons.size(); i++){
-//        for(QGraphicsItem* item : Polygons[i]){
-//            QPoint* Item = dynamic_cast<QPoint* >(item);
-//            Pol << *Item;
-//        }
-//        painter->drawPolygon(Pol);
-//    }*/
+double Route::distance(QPointF* current, QPointF* neighbor) {
+    return std::sqrt(std::pow(current->x() - neighbor->x(), 2) + std::pow(current->y() - neighbor->y(), 2));
+}
 
 
 
+std::vector<Node> Route::getNeighbors(Node* node, Node* goal, int n) {
+    std::vector<Node> neighbors;
+    int x = node->Point.x();
+    int y = node->Point.y();
+    static const std::vector<std::pair<int, int>> directions = {
+        {1, 0}, {-1, 0}, {0, 1}, {0, -1}, // Основные направления
+        {1, 1}, {-1, 1}, {1, -1}, {-1, -1} // Диагональные направления
+    };
 
-//    // Создание линий на карте маршрута
-//    QPen pen(Qt::white);
-//    for(size_t i = 0; i < Polygons.size(); i+=1){
-//        MoveItem *item1 = nullptr;
-//        MoveItem *item2 = nullptr;
-//        MoveItem *root = nullptr;
-//        for(QGraphicsItem* item : Polygons[i]){
-//            if(root == nullptr){
-//                root = dynamic_cast<MoveItem *>(item);
-//            }
-//            else{
-//                if(item1 == nullptr){
-//                    item1 = dynamic_cast<MoveItem *>(item);;
-//                    QGraphicsLineItem *line = new QGraphicsLineItem(QLineF(root->pos(), item1->pos()));
-//                    line->setPen(pen);
-//                    scene->addItem(line);
-//                }
-//                else{
-//                    item2 = dynamic_cast<MoveItem *>(item);
-//                    QGraphicsLineItem *line = new QGraphicsLineItem(QLineF(item1->pos(), item2->pos()));
-//                    line->setPen(pen);
-//                    scene->addItem(line);
-//                    item1 = item2;
-//                    item2 = nullptr;
-//                }
-//            }
-//        }
-//        if(item1 != nullptr && root != nullptr){
-//            QGraphicsLineItem *line = new QGraphicsLineItem(QLineF(root->pos(), item1->pos()));
-//            line->setPen(pen);
-//            scene->addItem(line);
+    for (const auto& dir : directions) {
+        int nx = x + dir.first;
+        int ny = y + dir.second;
+        if (isValid(nx, ny, n)) {
+            QPointF neighborPoint(nx, ny);
+            if (!searchPoint(neighborPoint)) {
+                double moveCost = (dir.first != 0 && dir.second != 0) ? sqrt(2) : 1;
+                neighbors.emplace_back(Node(nx, ny, node->cost + moveCost, heuristic(nx, ny, goal->Point.x(), goal->Point.y())));
+            }
+        }
+    }
 
-////            bool ok;
-////            int passIndex = indexes[i];
-////            if(ok){
-//                //for(QGraphicsItem* item : scene->items()){
-//                //    QGraphicsLineItem* lineItem = dynamic_cast<QGraphicsLineItem*>(item);
-//                //    if(lineItem){
-//                //
-//                //        lineItem->setData(passIndexRole, passIndex);
-//                //    }
-//                //}
-//                QPointF center = (root->pos() + item1->pos()) / 2;
-//                QGraphicsTextItem* indexItem = scene->addText(QString::number(indexes[i]));
-//                indexItem->setPos(center);
-//                indexItem->setDefaultTextColor(Qt::red);
-//                //indexes.push_back(passIndex);
-//            //}
-//        }
-//    }
-
-
-
-
-
-//    file.close();
-//}
-
-
-
-//void Route::setStartPoint(QGraphicsItem startPoint) {
-
-//}
-
-
-
-//void Route::setFinishPoint(QGraphicsItem finishPoint) {
-
-//}
-
-
-
-//void Route::findOptimalRoute() {
-
-//}
-
-
-
-//void Route::saveRouteToFile(const QString &fileName) {
-
-//}
-
-
-
-//void Route::clearRoute() {
-
-//}
+    return neighbors;
+}

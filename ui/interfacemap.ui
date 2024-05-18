@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>700</height>
+    <height>715</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -21,11 +21,10 @@
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: #333333;
-color: #ffffff
-</string>
+color: #ffffff</string>
   </property>
   <layout class="QFormLayout" name="formLayout">
-   <item row="0" column="0">
+   <item row="1" column="0">
     <layout class="QGridLayout" name="gridLayout">
      <item row="10" column="0">
       <spacer name="verticalSpacer_5">
@@ -105,7 +104,7 @@ color: #ffffff
      </item>
     </layout>
    </item>
-   <item row="0" column="1">
+   <item row="1" column="1">
     <widget class="QGraphicsView" name="graphicsView">
      <property name="enabled">
       <bool>true</bool>
@@ -138,6 +137,23 @@ color: #ffffff
        <width>0.000000000000000</width>
        <height>0.000000000000000</height>
       </rectf>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLabel" name="label">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: #333333;
+color: #ffffff</string>
+     </property>
+     <property name="text">
+      <string>Добавить точку - [ЛКМ], Создать препятствие - [ПКМ]</string>
      </property>
     </widget>
    </item>

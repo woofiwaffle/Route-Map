@@ -1,0 +1,415 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.10.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Route-Map: Класс Route</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Route-Map
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.10.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Открытые члены</a> &#124;
+<a href="#pub-attribs">Открытые атрибуты</a> &#124;
+<a href="class_route-members.html">Полный список членов класса</a>  </div>
+  <div class="headertitle"><div class="title">Класс Route</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Класс для представления маршрута и его расчета.  
+ <a href="#details">Подробнее...</a></p>
+
+<p><code>#include &lt;<a class="el" href="route_8h_source.html">route.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Открытые члены</h2></td></tr>
+<tr class="memitem:a7fea9da46df17c67ef83bd7d4dd447c8" id="r_a7fea9da46df17c67ef83bd7d4dd447c8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fea9da46df17c67ef83bd7d4dd447c8">loadMapFromXml</a> (const QString &amp;fileName, QGraphicsScene *scene)</td></tr>
+<tr class="memdesc:a7fea9da46df17c67ef83bd7d4dd447c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Загрузка карты из XML файла.  <br /></td></tr>
+<tr class="separator:a7fea9da46df17c67ef83bd7d4dd447c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9012e3b5f6fe8550043da0283227a2e" id="r_aa9012e3b5f6fe8550043da0283227a2e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9012e3b5f6fe8550043da0283227a2e">findOptimalRoute</a> (QPointF *start, QPointF *finish)</td></tr>
+<tr class="memdesc:aa9012e3b5f6fe8550043da0283227a2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Поиск оптимального маршрута от стартовой до конечной точки.  <br /></td></tr>
+<tr class="separator:aa9012e3b5f6fe8550043da0283227a2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a150d372054f6b8a2506f1d3624ae4b4b" id="r_a150d372054f6b8a2506f1d3624ae4b4b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a150d372054f6b8a2506f1d3624ae4b4b">distance</a> (QPointF *current, QPointF *neighbor)</td></tr>
+<tr class="memdesc:a150d372054f6b8a2506f1d3624ae4b4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вычисление расстояния между двумя точками.  <br /></td></tr>
+<tr class="separator:a150d372054f6b8a2506f1d3624ae4b4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4182c8e4838665d736c49e1bb7177211" id="r_a4182c8e4838665d736c49e1bb7177211"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4182c8e4838665d736c49e1bb7177211">heuristic</a> (int x1, int y1, int x2, int y2)</td></tr>
+<tr class="memdesc:a4182c8e4838665d736c49e1bb7177211"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вычисление евристической стоимости.  <br /></td></tr>
+<tr class="separator:a4182c8e4838665d736c49e1bb7177211"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd2c4b85201cc769dc2a6408e5806ca4" id="r_afd2c4b85201cc769dc2a6408e5806ca4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd2c4b85201cc769dc2a6408e5806ca4">findCost</a> (<a class="el" href="struct_node.html">Node</a> *current, <a class="el" href="struct_node.html">Node</a> *goal)</td></tr>
+<tr class="memdesc:afd2c4b85201cc769dc2a6408e5806ca4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вычисление стоимости пути от текущего узла до целевого.  <br /></td></tr>
+<tr class="separator:afd2c4b85201cc769dc2a6408e5806ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24125e29e646c6c67c06b36ae6061917" id="r_a24125e29e646c6c67c06b36ae6061917"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="struct_node.html">Node</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24125e29e646c6c67c06b36ae6061917">getNeighbors</a> (<a class="el" href="struct_node.html">Node</a> *node, <a class="el" href="struct_node.html">Node</a> *goal, int n)</td></tr>
+<tr class="memdesc:a24125e29e646c6c67c06b36ae6061917"><td class="mdescLeft">&#160;</td><td class="mdescRight">Получение соседних узлов.  <br /></td></tr>
+<tr class="separator:a24125e29e646c6c67c06b36ae6061917"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1bf97f6211a63ad7ec556a267b4c0ab" id="r_ad1bf97f6211a63ad7ec556a267b4c0ab"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1bf97f6211a63ad7ec556a267b4c0ab">searchPoint</a> (QPointF)</td></tr>
+<tr class="memdesc:ad1bf97f6211a63ad7ec556a267b4c0ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Проверка, содержится ли точка в каком-либо полигоне.  <br /></td></tr>
+<tr class="separator:ad1bf97f6211a63ad7ec556a267b4c0ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a208ad3b93bf2e4b488438f90fe5d0ae0" id="r_a208ad3b93bf2e4b488438f90fe5d0ae0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="struct_node.html">Node</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a208ad3b93bf2e4b488438f90fe5d0ae0">aStar</a> (<a class="el" href="struct_node.html">Node</a> start, <a class="el" href="struct_node.html">Node</a> goal, int n)</td></tr>
+<tr class="memdesc:a208ad3b93bf2e4b488438f90fe5d0ae0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Алгоритм поиска A*.  <br /></td></tr>
+<tr class="separator:a208ad3b93bf2e4b488438f90fe5d0ae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Открытые атрибуты</h2></td></tr>
+<tr class="memitem:a8f48c3ac19ad9b1b149853dee1dad4a2" id="r_a8f48c3ac19ad9b1b149853dee1dad4a2"><td class="memItemLeft" align="right" valign="top"><a id="a8f48c3ac19ad9b1b149853dee1dad4a2" name="a8f48c3ac19ad9b1b149853dee1dad4a2"></a>
+std::vector&lt; QPolygonF &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Polygons</b></td></tr>
+<tr class="memdesc:a8f48c3ac19ad9b1b149853dee1dad4a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вектор полигонов препятствий <br /></td></tr>
+<tr class="separator:a8f48c3ac19ad9b1b149853dee1dad4a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a20bf8720c3d804999537b2e612c37f" id="r_a7a20bf8720c3d804999537b2e612c37f"><td class="memItemLeft" align="right" valign="top"><a id="a7a20bf8720c3d804999537b2e612c37f" name="a7a20bf8720c3d804999537b2e612c37f"></a>
+std::vector&lt; <a class="el" href="struct_node.html">Node</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>WayPoints</b></td></tr>
+<tr class="memdesc:a7a20bf8720c3d804999537b2e612c37f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вектор точек маршрута <br /></td></tr>
+<tr class="separator:a7a20bf8720c3d804999537b2e612c37f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1771ed9d0a3bad44a37f8db45dc03b10" id="r_a1771ed9d0a3bad44a37f8db45dc03b10"><td class="memItemLeft" align="right" valign="top"><a id="a1771ed9d0a3bad44a37f8db45dc03b10" name="a1771ed9d0a3bad44a37f8db45dc03b10"></a>
+QPolygonF&#160;</td><td class="memItemRight" valign="bottom"><b>Polygon</b></td></tr>
+<tr class="memdesc:a1771ed9d0a3bad44a37f8db45dc03b10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Текущий полигон <br /></td></tr>
+<tr class="separator:a1771ed9d0a3bad44a37f8db45dc03b10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a509915af55ec6df51a7be1776872324c" id="r_a509915af55ec6df51a7be1776872324c"><td class="memItemLeft" align="right" valign="top"><a id="a509915af55ec6df51a7be1776872324c" name="a509915af55ec6df51a7be1776872324c"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>flag</b> = 1</td></tr>
+<tr class="memdesc:a509915af55ec6df51a7be1776872324c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Флаг для внутренних нужд <br /></td></tr>
+<tr class="separator:a509915af55ec6df51a7be1776872324c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45056ad2fca54b11d6d594877d3c79f5" id="r_a45056ad2fca54b11d6d594877d3c79f5"><td class="memItemLeft" align="right" valign="top"><a id="a45056ad2fca54b11d6d594877d3c79f5" name="a45056ad2fca54b11d6d594877d3c79f5"></a>
+<a class="el" href="class_obstacle.html">Obstacle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>obstacle</b></td></tr>
+<tr class="memdesc:a45056ad2fca54b11d6d594877d3c79f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Объект препятствий <br /></td></tr>
+<tr class="separator:a45056ad2fca54b11d6d594877d3c79f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><p>Класс для представления маршрута и его расчета. </p>
+</div><h2 class="groupheader">Методы</h2>
+<a id="a208ad3b93bf2e4b488438f90fe5d0ae0" name="a208ad3b93bf2e4b488438f90fe5d0ae0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a208ad3b93bf2e4b488438f90fe5d0ae0">&#9670;&#160;</a></span>aStar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="struct_node.html">Node</a> &gt; Route::aStar </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_node.html">Node</a></td>          <td class="paramname"><span class="paramname"><em>start</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_node.html">Node</a></td>          <td class="paramname"><span class="paramname"><em>goal</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>n</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Алгоритм поиска A*. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">start</td><td>Стартовый узел </td></tr>
+    <tr><td class="paramname">goal</td><td>Целевой узел </td></tr>
+    <tr><td class="paramname">n</td><td>Размер карты </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Вектор узлов, представляющих путь </dd></dl>
+
+</div>
+</div>
+<a id="a150d372054f6b8a2506f1d3624ae4b4b" name="a150d372054f6b8a2506f1d3624ae4b4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a150d372054f6b8a2506f1d3624ae4b4b">&#9670;&#160;</a></span>distance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Route::distance </td>
+          <td>(</td>
+          <td class="paramtype">QPointF *</td>          <td class="paramname"><span class="paramname"><em>current</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QPointF *</td>          <td class="paramname"><span class="paramname"><em>neighbor</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Вычисление расстояния между двумя точками. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">current</td><td>Текущая точка </td></tr>
+    <tr><td class="paramname">neighbor</td><td>Соседняя точка </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Расстояние между точками </dd></dl>
+
+</div>
+</div>
+<a id="afd2c4b85201cc769dc2a6408e5806ca4" name="afd2c4b85201cc769dc2a6408e5806ca4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd2c4b85201cc769dc2a6408e5806ca4">&#9670;&#160;</a></span>findCost()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Route::findCost </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_node.html">Node</a> *</td>          <td class="paramname"><span class="paramname"><em>current</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_node.html">Node</a> *</td>          <td class="paramname"><span class="paramname"><em>goal</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Вычисление стоимости пути от текущего узла до целевого. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">current</td><td>Текущий узел </td></tr>
+    <tr><td class="paramname">goal</td><td>Целевой узел </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Стоимость пути </dd></dl>
+
+</div>
+</div>
+<a id="aa9012e3b5f6fe8550043da0283227a2e" name="aa9012e3b5f6fe8550043da0283227a2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9012e3b5f6fe8550043da0283227a2e">&#9670;&#160;</a></span>findOptimalRoute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Route::findOptimalRoute </td>
+          <td>(</td>
+          <td class="paramtype">QPointF *</td>          <td class="paramname"><span class="paramname"><em>start</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QPointF *</td>          <td class="paramname"><span class="paramname"><em>finish</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Поиск оптимального маршрута от стартовой до конечной точки. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">start</td><td>Стартовая точка </td></tr>
+    <tr><td class="paramname">finish</td><td>Конечная точка </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a24125e29e646c6c67c06b36ae6061917" name="a24125e29e646c6c67c06b36ae6061917"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24125e29e646c6c67c06b36ae6061917">&#9670;&#160;</a></span>getNeighbors()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="struct_node.html">Node</a> &gt; Route::getNeighbors </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_node.html">Node</a> *</td>          <td class="paramname"><span class="paramname"><em>node</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_node.html">Node</a> *</td>          <td class="paramname"><span class="paramname"><em>goal</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>n</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Получение соседних узлов. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>Текущий узел </td></tr>
+    <tr><td class="paramname">goal</td><td>Целевой узел </td></tr>
+    <tr><td class="paramname">n</td><td>Размер карты </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Вектор соседних узлов </dd></dl>
+
+</div>
+</div>
+<a id="a4182c8e4838665d736c49e1bb7177211" name="a4182c8e4838665d736c49e1bb7177211"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4182c8e4838665d736c49e1bb7177211">&#9670;&#160;</a></span>heuristic()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Route::heuristic </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>x1</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>y1</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>x2</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>y2</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Вычисление евристической стоимости. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x1</td><td>Координата x первой точки </td></tr>
+    <tr><td class="paramname">y1</td><td>Координата y первой точки </td></tr>
+    <tr><td class="paramname">x2</td><td>Координата x второй точки </td></tr>
+    <tr><td class="paramname">y2</td><td>Координата y второй точки </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Евристическая стоимость </dd></dl>
+
+</div>
+</div>
+<a id="a7fea9da46df17c67ef83bd7d4dd447c8" name="a7fea9da46df17c67ef83bd7d4dd447c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fea9da46df17c67ef83bd7d4dd447c8">&#9670;&#160;</a></span>loadMapFromXml()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Route::loadMapFromXml </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;</td>          <td class="paramname"><span class="paramname"><em>fileName</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QGraphicsScene *</td>          <td class="paramname"><span class="paramname"><em>scene</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Загрузка карты из XML файла. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fileName</td><td>Имя файла </td></tr>
+    <tr><td class="paramname">scene</td><td>Графическая сцена для отображения карты </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad1bf97f6211a63ad7ec556a267b4c0ab" name="ad1bf97f6211a63ad7ec556a267b4c0ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1bf97f6211a63ad7ec556a267b4c0ab">&#9670;&#160;</a></span>searchPoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Route::searchPoint </td>
+          <td>(</td>
+          <td class="paramtype">QPointF</td>          <td class="paramname"><span class="paramname"><em>pt</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Проверка, содержится ли точка в каком-либо полигоне. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pt</td><td>Точка для проверки </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>true если точка содержится в полигоне </dd></dl>
+
+</div>
+</div>
+<hr/>Объявления и описания членов классов находятся в файлах:<ul>
+<li>headers/<a class="el" href="route_8h_source.html">route.h</a></li>
+<li>src/<b>route.cpp</b></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
+</small></address>
+</body>
+</html>
