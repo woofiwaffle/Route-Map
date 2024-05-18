@@ -12,13 +12,10 @@
 #include <QDebug>
 #include <vector>
 
+#include "obstacle.h"
+
 
 using namespace std;
-
-
-enum CustomRoles {
-    passIndexRole = Qt::UserRole + 1
-};
 
 
 namespace Ui { class InterfaceMap; }
@@ -38,12 +35,8 @@ public:
 private:
     Ui::InterfaceMap *ui;
     QGraphicsScene *scene;
+    Obstacle obstacle;
 
-
-
-    std::vector<int> indexes;
-    vector <QPolygonF> Polygons;
-    QPolygonF Polygon;
 
 private slots:
     void backToMain();
