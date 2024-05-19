@@ -38,6 +38,7 @@ Route-Map is an application for route planning on a map using the A* (A-star) al
 ## Documentation
 
 * Reports can be found in the ```reports``` folder.
+* Doxygen style [documentation](https://woofiwaffle.github.io/Route-Map/)
 
 ## Requirements
 
