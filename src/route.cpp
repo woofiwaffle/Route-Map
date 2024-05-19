@@ -1,5 +1,6 @@
 #include "headers/route.h"
-using namespace std;
+
+
 
 void Route::loadMapFromXml(const QString& fileName, QGraphicsScene* scene) {
     QFile file(fileName);
@@ -30,6 +31,7 @@ void Route::loadMapFromXml(const QString& fileName, QGraphicsScene* scene) {
                     // Add the polygon to the scene
                     scene->addPolygon(currentPolygon, QPen(Qt::white), QBrush(Qt::lightGray));
                     Polygons.push_back(currentPolygon);
+                    obstacle.Polygons.push_back(currentPolygon);
 
                     // Calculate the centroid of the polygon for index positioning
                     QPointF centroid(0, 0);
@@ -68,7 +70,9 @@ void Route::loadMapFromXml(const QString& fileName, QGraphicsScene* scene) {
 //проверка, является ли точка в полигоне
 bool Route::searchPoint(QPointF pt){
     for(size_t i = 0; i < Polygons.size(); i++){
-        if(Polygons[i].containsPoint(pt, Qt::OddEvenFill)) return true;
+        if(Polygons[i].containsPoint(pt, Qt::OddEvenFill))
+            if(obstacle.indexes[i] > 40)
+                return true;
     }
     return false;
 }
@@ -84,7 +88,7 @@ bool isValid(int x, int y, int n) {
 int Route::heuristic(int x1, int y1, int x2, int y2) {
     int dx = abs(x1 - x2);
     int dy = abs(y1 - y2);
-    return 10 * (dx + dy) + (14 - 2 * 10) * std::min(dx, dy);
+    return 50 * sqrt(dx*dx + dy*dy);  // Алгоритм Евклида
 }
 
 
@@ -111,7 +115,6 @@ bool searching(std::vector<Node> visited, Node current) {
     }) != visited.end();
 }
 
-
 // алгоритм A*
 std::vector<Node> Route::aStar(Node start, Node goal, int n) {
     std::vector<Node> closedSet;
@@ -119,12 +122,12 @@ std::vector<Node> Route::aStar(Node start, Node goal, int n) {
     std::vector<Node> visited;
     openSet.emplace_back(start);
 
-    while(!openSet.empty()){
+    while (!openSet.empty()) {
         Node current = openSet[0];
         int currentIndex = 0;
-        //Если среди новых точек есть та, у которой расстояние будет меньше рассматриваемой, то рассматриваемую возьмут эту новую точку
-        for(int i = 1; i < openSet.size(); i++){
-            if(openSet[i].cost + openSet[i].heuristic < current.cost + current.heuristic){
+        // Если среди новых точек есть та, у которой расстояние будет меньше рассматриваемой, то рассматриваемую возьмут эту новую точку
+        for (int i = 1; i < openSet.size(); i++) {
+            if (openSet[i].cost + openSet[i].heuristic < current.cost + current.heuristic) {
                 current = openSet[i];
                 currentIndex = i;
             }
@@ -133,54 +136,53 @@ std::vector<Node> Route::aStar(Node start, Node goal, int n) {
         openSet.erase(openSet.begin() + currentIndex);
         closedSet.push_back(current);
 
-
-        //Когда путь будет сформирован от начала до конца, то алгоритм будет выводить итог кратчайшего пути
-        if(current.Point.x() == goal.Point.x() && current.Point.y() == goal.Point.y()){
-            qDebug() << closedSet.size() << " " << openSet.size();
+        // Когда путь будет сформирован от начала до конца, алгоритм выводит итог кратчайшего пути
+        if (current.Point.x() == goal.Point.x() && current.Point.y() == goal.Point.y()) {
+            qDebug() << closedSet.size();
             std::vector<Node> path;
             path.push_back(goal);
-            for(int i = closedSet.size()-2; i > 0; i--){
-                if(closedSet[i].cost <= current.cost && !searchPoint(closedSet[i].Point)){
+            for (int i = closedSet.size() - 2; i > 0; i--) {
+                if (closedSet[i].cost <= current.cost && !searchPoint(closedSet[i].Point)) {
                     path.push_back(current);
                     visited.push_back(current);
-
                     current = closedSet[i];
                 }
             }
             path.push_back(start);
             return path;
         }
-        //Проверка точек-соседей на нахождение или отсутствие в закрытом(точки конечного пути) и открытом(множество новых нерассмотренных точек) списках
+
+        // Проверка точек-соседей
         std::vector<Node> neighbors = getNeighbors(&current, &goal, n);
-        for(Node neighbor : neighbors){
-            if(!searchPoint(neighbor.Point)){
-               bool isClosed = false;
-               for(Node closedNode : closedSet){
-                   if(closedNode.Point.x() == neighbor.Point.x() && closedNode.Point.y() == neighbor.Point.y()){
-                      isClosed = true;
-                      break;
-                   }
-               }
-
-               if(!isClosed){
-                  bool isOpen = false;
-                  for(Node& openNode : openSet){
-                     if(openNode.Point.x() == neighbor.Point.x() && openNode.Point.y() == neighbor.Point.y()){
-                        isOpen = true;
-                        if(current.cost < openNode.cost){
-                           openNode.cost = current.cost;
-                        }
+        for (Node neighbor : neighbors) {
+            if (!searchPoint(neighbor.Point) || obstacle.indexes[&neighbor - &neighbors[0]] <= 40) {
+                bool isClosed = false;
+                for (Node closedNode : closedSet) {
+                    if (closedNode.Point.x() == neighbor.Point.x() && closedNode.Point.y() == neighbor.Point.y()) {
+                        isClosed = true;
                         break;
-                     }
-                  }
+                    }
+                }
 
-                  if(!isOpen){
-                     neighbor.cost = current.cost;
-                     openSet.emplace_back(neighbor);
-                  }
-              }
-          }
-       }
+                if (!isClosed) {
+                    bool isOpen = false;
+                    for (Node& openNode : openSet) {
+                        if (openNode.Point.x() == neighbor.Point.x() && openNode.Point.y() == neighbor.Point.y()) {
+                            isOpen = true;
+                            if (current.cost < openNode.cost) {
+                                openNode.cost = current.cost;
+                            }
+                            break;
+                        }
+                    }
+
+                    if (!isOpen) {
+                        neighbor.cost = current.cost;
+                        openSet.emplace_back(neighbor);
+                    }
+                }
+            }
+        }
     }
 
     return std::vector<Node>();
@@ -189,7 +191,7 @@ std::vector<Node> Route::aStar(Node start, Node goal, int n) {
 
 
 double Route::distance(QPointF* current, QPointF* neighbor) {
-    return std::sqrt(std::pow(current->x() - neighbor->x(), 2) + std::pow(current->y() - neighbor->y(), 2));
+    return std::sqrt(std::pow(current->x() - neighbor->x(), 1.4) + std::pow(current->y() - neighbor->y(), 1.4));
 }
 
 
@@ -209,7 +211,7 @@ std::vector<Node> Route::getNeighbors(Node* node, Node* goal, int n) {
         if (isValid(nx, ny, n)) {
             QPointF neighborPoint(nx, ny);
             if (!searchPoint(neighborPoint)) {
-                double moveCost = (dir.first != 0 && dir.second != 0) ? sqrt(2) : 1;
+                double moveCost = (dir.first != 0 && dir.second != 0) ? sqrt(1.4) : 1;
                 neighbors.emplace_back(Node(nx, ny, node->cost + moveCost, heuristic(nx, ny, goal->Point.x(), goal->Point.y())));
             }
         }

@@ -9,13 +9,7 @@
 namespace Ui { class MainWindow; }
 
 /**
- * @brief Основное окно приложения.
- * @author woofiwaffle
- * @version 0.1
- * @date Май 2024 года
- *
- * Этот класс представляет собой основное окно приложения.
- * Он содержит две кнопки для открытия окон карты и маршрута.
+ * @brief Класс, представляющий главное окно приложения.
  */
 class MainWindow : public QWidget {
     Q_OBJECT
@@ -23,7 +17,7 @@ class MainWindow : public QWidget {
 public:
     /**
      * @brief Конструктор класса MainWindow.
-     * @param parent Родительский объект (по умолчанию nullptr).
+     * @param parent Родительский объект.
      */
     MainWindow(QWidget *parent = nullptr);
 
@@ -33,16 +27,16 @@ public:
     ~MainWindow();
 
 private:
-    Ui::MainWindow *ui; /**< Интерфейс основного окна */
+    Ui::MainWindow *ui; /**< Указатель на объект интерфейса главного окна. */
 
 private slots:
     /**
-     * @brief Открытие окна карты.
+     * @brief Открывает окно для работы с картой.
      */
     void openMapWindow();
 
     /**
-     * @brief Открытие окна маршрута.
+     * @brief Открывает окно для построения маршрута.
      */
     void openRouteWindow();
 };

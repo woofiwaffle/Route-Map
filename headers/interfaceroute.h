@@ -8,14 +8,7 @@
 namespace Ui { class InterfaceRoute; }
 
 /**
- * @brief Интерфейс для маршрута.
- * @author woofiwaffle
- * @version 0.1
- * @date Май 2024 года
- *
- * Этот класс представляет собой интерфейс для работы с маршрутом.
- * Он содержит методы для управления маршрутом, загрузки карты, начала путешествия,
- * сохранения данных и очистки маршрута.
+ * @brief Класс, представляющий интерфейс для построения маршрутов.
  */
 class InterfaceRoute : public QWidget {
     Q_OBJECT
@@ -23,7 +16,7 @@ class InterfaceRoute : public QWidget {
 public:
     /**
      * @brief Конструктор класса InterfaceRoute.
-     * @param parent Родительский объект (по умолчанию nullptr).
+     * @param parent Родительский объект.
      */
     InterfaceRoute(QWidget *parent = nullptr);
 
@@ -33,43 +26,42 @@ public:
     ~InterfaceRoute();
 
 private:
-    Ui::InterfaceRoute *ui; /**< Интерфейс окна маршрута */
-    QGraphicsScene *scene; /**< Сцена для отображения графики */
-    QPointF* StartPoint = nullptr; /**< Точка начала маршрута */
-    QPointF* FinishPoint = nullptr; /**< Точка окончания маршрута */
-    Route route; /**< Объект маршрута */
-
-    int n = 1200; /**< Размерность */
+    Ui::InterfaceRoute *ui; /**< Указатель на объект интерфейса InterfaceRoute. */
+    QGraphicsScene *scene; /**< Указатель на графическую сцену. */
+    QPointF* StartPoint = nullptr; /**< Указатель на начальную точку маршрута. */
+    QPointF* FinishPoint = nullptr; /**< Указатель на конечную точку маршрута. */
+    Route route; /**< Объект маршрута. */
+    int n = 1200; /**< Параметр для определения соседей. */
 
 private slots:
     /**
-     * @brief Обработчик нажатия кнопки мыши.
-     * @param event Событие мыши.
+     * @brief Обрабатывает событие нажатия мыши.
+     * @param event Событие нажатия мыши.
      */
     void mousePressEvent(QMouseEvent *);
 
     /**
-     * @brief Возврат к основному окну.
+     * @brief Возвращает пользователя в главное окно.
      */
     void backToMain();
 
     /**
-     * @brief Обработчик нажатия кнопки "Загрузить карту".
+     * @brief Обрабатывает нажатие кнопки "Loading Map".
      */
     void on_button_LoadingMap_clicked();
 
     /**
-     * @brief Обработчик нажатия кнопки "Начать путешествие".
+     * @brief Обрабатывает нажатие кнопки "Start Journey".
      */
     void on_button_StartJourney_clicked();
 
     /**
-     * @brief Обработчик нажатия кнопки "Сохранить".
+     * @brief Обрабатывает нажатие кнопки "Save".
      */
     void on_button_Save_clicked();
 
     /**
-     * @brief Обработчик нажатия кнопки "Очистить маршрут".
+     * @brief Обрабатывает нажатие кнопки "Clear Way".
      */
     void on_button_ClearWay_clicked();
 };

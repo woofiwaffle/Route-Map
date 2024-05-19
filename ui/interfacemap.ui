@@ -153,7 +153,7 @@ color: #ffffff</string>
 color: #ffffff</string>
      </property>
      <property name="text">
-      <string>Добавить точку - [ЛКМ], Создать препятствие - [ПКМ]</string>
+      <string>Add point - [LMB], Create obstacle - [RMB]</string>
      </property>
     </widget>
    </item>

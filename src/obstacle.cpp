@@ -61,6 +61,10 @@ void Obstacle::finalizePolygon(QGraphicsScene *scene) {
         }
         indexes.push_back(passIndex);
     }
+    else {
+        scene->removeItem(scene->items().first());
+        Polygons.pop_back();
+    }
     Polygon.clear();
 }
 
