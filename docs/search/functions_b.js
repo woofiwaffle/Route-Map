@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['savetoxml_0',['saveToXml',['../class_obstacle.html#aa237f817e6d382ffde13c01c168e561b',1,'Obstacle']]],
-  ['searchpoint_1',['searchPoint',['../class_route.html#ad1bf97f6211a63ad7ec556a267b4c0ab',1,'Route']]]
+  ['_7einterfacemap_0',['~InterfaceMap',['../class_interface_map.html#aedbb84fd2b753388c775f8583bf8d159',1,'InterfaceMap']]],
+  ['_7einterfaceroute_1',['~InterfaceRoute',['../class_interface_route.html#aa4d30db73c4cbaa8f5758140bc05edb5',1,'InterfaceRoute']]],
+  ['_7emainwindow_2',['~MainWindow',['../class_main_window.html#ae98d00a93bc118200eeef9f9bba1dba7',1,'MainWindow']]]
 ];

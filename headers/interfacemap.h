@@ -8,12 +8,7 @@
 namespace Ui { class InterfaceMap; }
 
 /**
- * @brief Интерфейс для отображения карты.
- * @author woofiwaffle
- * @version 0.1
- * @date Май 2024 года
- *
- * Этот класс представляет собой интерфейс для отображения карты и управления ею.
+ * @brief Класс, представляющий интерфейс для работы с картой.
  */
 class InterfaceMap : public QWidget {
     Q_OBJECT
@@ -21,7 +16,7 @@ class InterfaceMap : public QWidget {
 public:
     /**
      * @brief Конструктор класса InterfaceMap.
-     * @param parent Родительский объект (по умолчанию nullptr).
+     * @param parent Родительский объект.
      */
     explicit InterfaceMap(QWidget *parent = nullptr);
 
@@ -31,29 +26,29 @@ public:
     ~InterfaceMap();
 
     /**
-     * @brief Обработчик нажатия кнопки мыши.
-     * @param event Событие мыши.
+     * @brief Обрабатывает событие нажатия мыши.
+     * @param event Событие нажатия мыши.
      */
     void mousePressEvent(QMouseEvent *event);
 
 private:
-    Ui::InterfaceMap *ui; /**< Интерфейс окна карты */
-    QGraphicsScene *scene; /**< Сцена для отображения графики */
-    Obstacle obstacle; /**< Объект препятствия на карте */
+    Ui::InterfaceMap *ui; /**< Указатель на объект интерфейса InterfaceMap. */
+    QGraphicsScene *scene; /**< Указатель на графическую сцену. */
+    Obstacle obstacle; /**< Объект препятствия. */
 
 private slots:
     /**
-     * @brief Возврат к основному окну.
+     * @brief Возвращает пользователя в главное окно.
      */
     void backToMain();
 
     /**
-     * @brief Обработчик нажатия кнопки "Очистить карту".
+     * @brief Обрабатывает нажатие кнопки "Clear Map".
      */
     void on_button_ClearMap_clicked();
 
     /**
-     * @brief Обработчик нажатия кнопки "Сохранить".
+     * @brief Обрабатывает нажатие кнопки "Save".
      */
     void on_button_Save_clicked();
 };

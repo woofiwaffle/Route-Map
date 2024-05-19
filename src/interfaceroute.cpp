@@ -87,30 +87,31 @@ void InterfaceRoute::on_button_StartJourney_clicked() {
 
         Node Start(StartPoint->x(), StartPoint->y(), 0, route.heuristic(StartPoint->x(), StartPoint->y(), FinishPoint->x(), FinishPoint->y()));
         Node Finish(FinishPoint->x(), FinishPoint->y(), 0, 0);
-        if (route.aStar(Start, Finish, n).size() < route.aStar(Finish, Start, n).size()) {
-            route.WayPoints = route.aStar(Start, Finish, n);
+        std::vector<Node> path = route.aStar(Start, Finish, n);
+        if (path.empty()) {
+            path = route.aStar(Finish, Start, n);
         }
-        else {
-            route.WayPoints = route.aStar(Finish, Start, n);
-        }
+        route.WayPoints = path;
 
         qDebug() << route.WayPoints.size();
 
-        QPen routePen(Qt::darkCyan, 3, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin);
-        for (int i = 0; i < route.WayPoints.size() - 2; i++) {
+        QPen routePen(Qt::darkCyan, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+
+        for (int i = 0; i < route.WayPoints.size() - 1; i++) {
             QLineF line(route.WayPoints[i].Point.x(), route.WayPoints[i].Point.y(), route.WayPoints[i + 1].Point.x(), route.WayPoints[i + 1].Point.y());
             scene->addLine(line, routePen);
         }
 
+        // Отображаем стартовую точку
         QGraphicsEllipseItem *startEllipse = new QGraphicsEllipseItem(StartPoint->x() - 4, StartPoint->y() - 4, 15, 15);
         startEllipse->setBrush(Qt::green);
         scene->addItem(startEllipse);
 
+        // Отображаем конечную точку
         QGraphicsEllipseItem *finishEllipse = new QGraphicsEllipseItem(FinishPoint->x() - 4, FinishPoint->y() - 4, 15, 15);
         finishEllipse->setBrush(Qt::red);
         scene->addItem(finishEllipse);
-    }
-    else {
+    } else {
         qDebug() << "Start and/or finish point not set";
     }
 }
