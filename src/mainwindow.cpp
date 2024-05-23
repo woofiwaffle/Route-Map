@@ -34,6 +34,7 @@ MainWindow::~MainWindow() {
 }
 
 
+
 void MainWindow::openRouteWindow() {
     InterfaceRoute *routeWindow = new InterfaceRoute();
     this->hide();
