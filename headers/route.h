@@ -20,6 +20,7 @@ struct Node {
     QPointF Point; /**< Координаты точки узла. */
     double cost; /**< Стоимость достижения узла. */
     int heuristic; /**< Эвристическая оценка расстояния до цели. */
+    Node* parent; /**< Указатель на родителя узла */
 
     /**
      * @brief Конструктор для создания узла.
@@ -27,9 +28,11 @@ struct Node {
      * @param y Координата y узла.
      * @param cost Стоимость достижения узла.
      * @param heuristic Эвристическая оценка расстояния до цели.
+     * @param p Указатель на корень узла.
      */
-    Node(int x, int y, double cost, int heuristic)
-        : Point(x, y), cost(cost), heuristic(heuristic) {}
+    Node(int x, int y, double cost, int heuristic, Node* p = nullptr)
+        : Point(x, y), cost(cost), heuristic(heuristic), parent(p) {}
+
 };
 
 /**

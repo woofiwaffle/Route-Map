@@ -48,7 +48,7 @@ InterfaceMap::~InterfaceMap() {
 }
 
 
-
+// функция возврата на главный экран
 void InterfaceMap::backToMain() {
     MainWindow *mainWindow = new MainWindow();
     this->close();
@@ -56,7 +56,7 @@ void InterfaceMap::backToMain() {
 }
 
 
-
+// функция создания препятствия на карте
 void InterfaceMap::mousePressEvent(QMouseEvent *event) {
     if(event->button() == Qt::LeftButton) {
        QPointF point(-ui->graphicsView->x() + event->pos().x(), -ui->graphicsView->y() + event->pos().y());
@@ -75,14 +75,14 @@ void InterfaceMap::mousePressEvent(QMouseEvent *event) {
 }
 
 
-
+// функция очистки карты
 void InterfaceMap::on_button_ClearMap_clicked() {
     scene->clear();
     obstacle.clearAll();
 }
 
 
-
+// функция сохранения карты
 void InterfaceMap::on_button_Save_clicked() {
     obstacle.saveToXml();
 }

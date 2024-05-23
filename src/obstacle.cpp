@@ -22,14 +22,14 @@ void Obstacle::finalizePolygon(QGraphicsScene *scene) {
     bool ok;
     int passIndex = QInputDialog::getInt(nullptr, "Create Index", "Enter index (1 - 100)", 0, 1, 100, 1, &ok);
     if (ok) {
-        // Calculate the centroid of the polygon;
+        // Вычисляем центроид многоугольника;
         QPointF centroid(0, 0);
         double signedArea = 0.0;
-        double x0 = 0.0; // x-coordinate of the current vertex
-        double y0 = 0.0; // y-coordinate of the current vertex
-        double x1 = 0.0; // x-coordinate of the next vertex
-        double y1 = 0.0; // y-coordinate of the next vertex
-        double a = 0.0;  // Partial signed area
+        double x0 = 0.0; //x-координата текущей вершины
+        double y0 = 0.0; // координата y текущей вершины
+        double x1 = 0.0; // координата x следующей вершины
+        double y1 = 0.0; // координата y следующей вершины
+        double a = 0.0;  // Частичная подписанная область
 
         for (int i = 0; i < Polygon.size(); ++i) {
             x0 = Polygon[i].x();

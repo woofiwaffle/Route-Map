@@ -62,7 +62,7 @@ void InterfaceRoute::backToMain() {
 }
 
 
-
+// функция загрузки карты из XML файла
 void InterfaceRoute::on_button_LoadingMap_clicked() {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open Map"), "", tr("XML Files (*.xml)"));
     if (fileName.isEmpty()) {
@@ -76,7 +76,7 @@ void InterfaceRoute::on_button_LoadingMap_clicked() {
 }
 
 
-
+// функция вывода маршрута на карте
 void InterfaceRoute::on_button_StartJourney_clicked() {
     if (StartPoint && FinishPoint) {
         // Проверяем, находятся ли стартовая и конечная точки внутри препятствий
@@ -111,7 +111,8 @@ void InterfaceRoute::on_button_StartJourney_clicked() {
         QGraphicsEllipseItem *finishEllipse = new QGraphicsEllipseItem(FinishPoint->x() - 4, FinishPoint->y() - 4, 15, 15);
         finishEllipse->setBrush(Qt::red);
         scene->addItem(finishEllipse);
-    } else {
+    }
+    else {
         qDebug() << "Start and/or finish point not set";
     }
 }
@@ -194,7 +195,7 @@ void InterfaceRoute::on_button_Save_clicked() {
 }
 
 
-
+// функция установки точкек Старта и Финиша на карте
 void InterfaceRoute::mousePressEvent(QMouseEvent *event){
     if(event->button() == Qt::LeftButton){
         if(!StartPoint){
