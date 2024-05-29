@@ -22,7 +22,7 @@ HEADERS += \
     headers/interfaceroute.h \
     headers/mainwindow.h \
     headers/obstacle.h \
-    headers/route.h
+    headers/route.h \
 
 FORMS += \
     ui/interfaceroute.ui \
