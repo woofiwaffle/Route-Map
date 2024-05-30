@@ -18,8 +18,8 @@
  */
 struct Node {
     QPointF Point; /**< Координаты точки узла. */
-    double cost; /**< Стоимость достижения узла. */
-    int heuristic; /**< Эвристическая оценка расстояния до цели. */
+    qreal cost; /**< Стоимость достижения узла. */
+    qreal heuristic; /**< Эвристическая оценка расстояния до цели. */
     Node* parent; /**< Указатель на родителя узла */
 
     /**
@@ -30,8 +30,8 @@ struct Node {
      * @param heuristic Эвристическая оценка расстояния до цели.
      * @param p Указатель на корень узла.
      */
-    Node(int x, int y, double cost, int heuristic, Node* p = nullptr)
-        : Point(x, y), cost(cost), heuristic(heuristic), parent(p) {}
+    Node(qreal x, qreal y, qreal cost, qreal heuristic)
+        : Point(x, y), cost(cost), heuristic(heuristic), parent(nullptr) {}
 
 };
 
@@ -77,7 +77,7 @@ public:
      * @param y2 Координата y второй точки.
      * @return Эвристическая оценка расстояния.
      */
-    int heuristic(int x1, int y1, int x2, int y2);
+    qreal heuristic(qreal x1, qreal y1, qreal x2, qreal y2);
 
     /**
      * @brief Находит стоимость прохода от текущей точки к цели.
@@ -85,7 +85,7 @@ public:
      * @param goal Указатель на целевой узел.
      * @return Стоимость прохода от текущей точки к цели.
      */
-    int findCost(Node* current, Node* goal);
+    qreal findCost(Node* current, Node* goal);
 
     /**
      * @brief Возвращает соседние узлы для заданного узла.
@@ -112,6 +112,9 @@ public:
     * @return Вектор узлов оптимального маршрута.
     */
     std::vector<Node> aStar(Node start, Node goal, int n);
+
+    bool lineIntersectsObstacle(const QPointF& start, const QPointF& end);
+    std::vector<Node> smoothPath(const std::vector<Node>& path);
 };
 
 #endif // ROUTE_H
