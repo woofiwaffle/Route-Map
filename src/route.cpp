@@ -79,21 +79,21 @@ bool Route::searchPoint(QPointF pt){
 
 
 //установка границ на создание соседних точек
-bool isValid(int x, int y, int n) {
+bool isValid(qreal x, qreal y, int n) {
     return (x >= 0 && x < n&& y >= 0 && y < n);
 }
 
 
 //вычисление евристической величины ( расстояния до конечной точки)
-int Route::heuristic(int x1, int y1, int x2, int y2) {
-    int dx = abs(x1 - x2);
-    int dy = abs(y1 - y2);
+qreal Route::heuristic(qreal x1, qreal y1, qreal x2, qreal y2) {
+    int dx = std::fabs(x1 - x2);
+    int dy = std::fabs(y1 - y2);
     return 50 * sqrt(dx*dx + dy*dy); // Алгоритм Евклида
 }
 
 
 //вычисление цены (текущей цели)
-int Route::findCost(Node* current, Node* goal) {
+qreal Route::findCost(Node* current, Node* goal) {
     if(flag == 1){
         return current->heuristic + 1;
     }
@@ -185,7 +185,7 @@ std::vector<Node> Route::aStar(Node start, Node goal, int n) {
 
                     // если сосед не был открыт, добавляем в список открытых узлов
                     if (!isOpen) {
-                        neighbor.cost = current.cost + current.cost + distance(&current.Point, &neighbor.Point);
+                        neighbor.cost = current.cost + distance(&current.Point, &neighbor.Point);
                         neighbor.parent = &current;
                         openSet.emplace_back(neighbor);
                     }
@@ -215,6 +215,13 @@ std::vector<Node> Route::getNeighbors(Node* node, Node* goal, int n) {
         {1, 0}, {-1, 0}, {0, 1}, {0, -1}, // Основные направления
         {1, 1}, {-1, 1}, {1, -1}, {-1, -1} // Диагональные направления
     };
+    QLineF Vector = QLineF(node->Point.x(), node->Point.y(), goal->Point.x(), goal->Point.y()).unitVector();
+
+    if(isValid(Vector.x2(), Vector.y2(), n)){
+        QPointF directNeighbor(Vector.x2(), Vector.y2());
+        if (!searchPoint(directNeighbor))
+            neighbors.emplace_back(Node(Vector.x2(), Vector.y2(), node->cost + Vector.length(), heuristic(Vector.x2(), Vector.y2(), goal->Point.x(), goal->Point.y())));
+    }
 
     for (const auto& dir : directions) {
         int nx = x + dir.first;
