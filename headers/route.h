@@ -112,9 +112,6 @@ public:
     * @return Вектор узлов оптимального маршрута.
     */
     std::vector<Node> aStar(Node start, Node goal, int n);
-
-    bool lineIntersectsObstacle(const QPointF& start, const QPointF& end);
-    std::vector<Node> smoothPath(const std::vector<Node>& path);
 };
 
 #endif // ROUTE_H
