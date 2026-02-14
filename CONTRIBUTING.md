@@ -43,8 +43,4 @@ If you encounter a bug or have a feature request, please open an issue on the Gi
 
 We appreciate your help in reviewing pull requests. If you're a maintainer or experienced contributor, please review open pull requests and provide constructive feedback.
 
-## Contact
-
-If you have any questions or need further assistance, feel free to contact us at [dadqwerty12@gmail.com].
-
 Thank you for contributing to Route-Map!
